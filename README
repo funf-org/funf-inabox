@@ -8,3 +8,8 @@ mkdir -p $WORKON_HOME
 source /usr/local/bin/virtualenvwrapper.sh
 mkvirtualenv funfinabox
 pip install -r requirements.txt
+
+
+Required environment variables:
+DROPBOX_APP_KEY
+DROPBOX_APP_SECRET
