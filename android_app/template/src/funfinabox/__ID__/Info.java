@@ -1,6 +1,6 @@
-package __PACKAGE__;
+package funfinabox.__ID__;
 
-import funfinabox.__APP_ID__.R;
+import funfinabox.__ID__.R;
 import android.app.Activity;
 import android.os.Bundle;
 
