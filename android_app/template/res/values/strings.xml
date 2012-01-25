@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Info</string>
+    <string name="app_name">__NAME__</string>
+    <string name="app_id">__ID__</string>
+    <string name="description">__DESCRIPTION__</string>
+    <string name="contact_email">__EMAIL__</string>
+    <string name="probes">__PROBES__</string>
+    <string name="config">__CONFIG__</string>
 </resources>
