@@ -105,6 +105,10 @@
 	    		<replacefilter token="__EMAIL__" value="${inabox.app.email}"/>
 	    		<replacefilter token="__CONFIG__" value="${inabox.app.config}"/>
 	    		<replacefilter token="__PASSWORD__" value="${inabox.app.password}"/>
+	    		<replacefilter token="__DROPBOX_APP_KEY__" value="${inabox.dropbox.appkey}"/>
+	    		<replacefilter token="__DROPBOX_APP_SECRET__" value="${inabox.dropbox.appsecret}"/>	
+	    		<replacefilter token="__DROPBOX_TOKEN__" value="${inabox.dropbox.token}"/>
+	    		<replacefilter token="__DROPBOX_TOKEN_SECRET__" value="${inabox.dropbox.tokensecret}"/>	
 	    	</replace>
 	    </target>
 </project>

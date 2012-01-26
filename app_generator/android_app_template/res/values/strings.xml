@@ -6,4 +6,7 @@
     <string name="contact_email">__EMAIL__</string>
     <string name="probes">__PROBES__</string>
     <string name="config">__CONFIG__</string>
+    <string name="have_questions">If you have questions, contact:</string>
+    <string name="app_records">This app records:</string>
+    <string name="by_funf">made using Funf In A Box</string>
 </resources>
