@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Funf in a Box{% endblock %}
+
+{% block content %}
+<div id="mainCenter">
+    <img id="logo" src="{{ STATIC_URL }}images/funfinabox.png" />
+
+    <form action="/create/" method="post">{% csrf_token %}
+    	<h3>General</h3>
+    	<hr />
+	    <div class="fieldWrapper">
+	        {{ form.app_name.errors }}
+	        <label for="id_app_name">App Name:</label>
+	        {{ form.app_name }}
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.description.errors }}
+	        <label for="id_description">Description:</label>
+	        {{ form.description }}
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.contact_email.errors }}
+	        <label for="id_contact_email">Contact Email:</label>
+	        {{ form.contact_email }}
+	    </div>
+	    <h3>Device</h3>
+	    <hr />
+	    <div class="fieldWrapper">
+	        {{ form.AndroidInfoProbe.errors }}
+	        {{ form.AndroidInfoProbe }} <label for="AndroidInfoProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Android_Info">Android Info</a> every </label>{{ form.AndroidInfoProbe_freq.errors }}{{ form.AndroidInfoProbe_freq }} seconds
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.BatteryProbe.errors }}
+	        {{ form.BatteryProbe }} <label for="BatteryProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Battery">Battery Info</a> every </label>{{ form.BatteryProbe_freq.errors }}{{ form.BatteryProbe_freq }} seconds
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.HardwareInfoProbe.errors }}
+	        {{ form.HardwareInfoProbe }} <label for="HardwareInfoProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Hardware_Info">Hardware Info</a> every </label>{{ form.HardwareInfoProbe_freq.errors }}{{ form.HardwareInfoProbe_freq }} seconds
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.TelephonyProbe.errors }}
+	        {{ form.TelephonyProbe }} <label for="TelephonyProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Telephony">Mobile Network Info</a> every </label>{{ form.TelephonyProbe_freq.errors }}{{ form.TelephonyProbe_freq }} seconds
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.TimeOffsetProbe.errors }}
+	        {{ form.TimeOffsetProbe }} <label for="TimeOffsetProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Time_Offset">Time Offset</a> every </label>{{ form.TimeOffsetProbe_freq.errors }}{{ form.TimeOffsetProbe_freq }} seconds
+	    </div>
+	    <h3>Device Interaction</h3>
+	    <hr />
+	    <div class="fieldWrapper">
+			{{ form.AudioFilesProbe.errors }}
+			{{ form.AudioFilesProbe }} <label for="AudioFilesProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Audio_Files">Audio Files</a> every </label>{{ form.AudioFilesProbe_freq.errors }}{{ form.AudioFilesProbe_freq }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.BrowserBookmarksProbe.errors }}
+			{{ form.BrowserBookmarksProbe }} <label for="BrowserBookmarksProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Browser_Bookmarks">Browser Bookmarks</a> every </label>{{ form.BrowserBookmarksProbe_freq.errors }}{{ form.BrowserBookmarksProbe_freq }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.BrowserSearchesProbe.errors }}
+			{{ form.BrowserSearchesProbe }} <label for="BrowserSearchesProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Browser_Searches">Browser Searches</a> every </label>{{ form.BrowserSearchesProbe_freq.errors }}{{ form.BrowserSearchesProbe_freq }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.ImagesProbe.errors }}
+			{{ form.ImagesProbe }} <label for="ImagesProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Images">Images</a> every </label>{{ form.ImagesProbe_freq.errors }}{{ form.ImagesProbe_freq }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.ApplicationsProbe.errors }}
+			{{ form.ApplicationsProbe }} <label for="ApplicationsProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Applications">Applications</a> every </label>{{ form.ApplicationsProbe_freq.errors }}{{ form.ApplicationsProbe_freq }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.RunningApplicationsProbe.errors }}
+			{{ form.RunningApplicationsProbe }} <label for="RunningApplicationsProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Running_Applications">Running Applications</a> every </label>{{ form.RunningApplicationsProbe_freq.errors }}{{ form.RunningApplicationsProbe_freq }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.VideosProbe.errors }}
+			{{ form.VideosProbe }} <label for="VideosProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Videos">Videos</a> every </label>{{ form.VideosProbe_freq.errors }}{{ form.VideosProbe_freq }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.ScreenProbe.errors }}
+			{{ form.ScreenProbe }} <a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Screen">Screen On/Off</a>
+		</div>
+		<h3>Environment</h3>
+		<hr />
+		<div class="fieldWrapper">
+			{{ form.AudioFeaturesProbe.errors }}
+			{{ form.AudioFeaturesProbe }} <label for="AudioFeaturesProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Audio_Features">Audio Features</a> every </label>{{ form.AudioFeaturesProbe_freq.errors }}{{ form.AudioFeaturesProbe_freq }} seconds for {{ form.AudioFeaturesProbe_duration.errors }}{{ form.AudioFeaturesProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.LightSensorProbe.errors }}
+			{{ form.LightSensorProbe }} <label for="LightSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Light_Sensor">Light Sensor</a> every </label>{{ form.LightSensorProbe_freq.errors }}{{ form.LightSensorProbe_freq }} seconds for {{ form.LightSensorProbe_duration.errors }}{{ form.LightSensorProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.MagneticFieldSensorProbe.errors }}
+			{{ form.MagneticFieldSensorProbe }} <label for="MagneticFieldSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Magnetic_Field_Sensor">Magnetic Field Sensor</a> every </label>{{ form.MagneticFieldSensorProbe_freq.errors }}{{ form.MagneticFieldSensorProbe_freq }} seconds for {{ form.MagneticFieldSensorProbe_duration.errors }}{{ form.MagneticFieldSensorProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.PressureSensorProbe.errors }}
+			{{ form.PressureSensorProbe }} <label for="PressureSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Pressure_Sensor">Pressure Sensor</a> every </label>{{ form.PressureSensorProbe_freq.errors }}{{ form.PressureSensorProbe_freq }} seconds for {{ form.PressureSensorProbe_duration.errors }}{{ form.PressureSensorProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.ProximitySensorProbe.errors }}
+			{{ form.ProximitySensorProbe }} <label for="ProximitySensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Proximity_Sensor">Proximity Sensor</a> every </label>{{ form.ProximitySensorProbe_freq.errors }}{{ form.ProximitySensorProbe_freq }} seconds for {{ form.ProximitySensorProbe_duration.errors }}{{ form.ProximitySensorProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.TemperatureSensorProbe.errors }}
+			{{ form.TemperatureSensorProbe }} <label for="TemperatureSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Temperature_Sensor">Temperature Sensor</a> every </label>{{ form.TemperatureSensorProbe_freq.errors }}{{ form.TemperatureSensorProbe_freq }} seconds for {{ form.TemperatureSensorProbe_duration.errors }}{{ form.TemperatureSensorProbe_duration }} seconds
+		</div>
+		<h3>Motion</h3>
+		<hr />
+		<div class="fieldWrapper">
+			{{ form.AccelerometerFeaturesProbe.errors }}
+			{{ form.AccelerometerFeaturesProbe }} <label for="AccelerometerFeaturesProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Accelerometer_Features">Accelerometer Features</a> every </label>{{ form.AccelerometerFeaturesProbe_freq.errors }}{{ form.AccelerometerFeaturesProbe_freq }} seconds for {{ form.AccelerometerFeaturesProbe_duration.errors }}{{ form.AccelerometerFeaturesProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.AccelerometerSensorProbe.errors }}
+			{{ form.AccelerometerSensorProbe }} <label for="AccelerometerSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Accelerometer_Sensor">Accelerometer Sensor</a> every </label>{{ form.AccelerometerSensorProbe_freq.errors }}{{ form.AccelerometerSensorProbe_freq }} seconds for {{ form.AccelerometerSensorProbe_duration.errors }}{{ form.AccelerometerSensorProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.ActivityProbe.errors }}
+			{{ form.ActivityProbe }} <label for="ActivityProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Activity">Activity</a> every </label>{{ form.ActivityProbe_freq.errors }}{{ form.ActivityProbe_freq }} seconds for {{ form.ActivityProbe_duration.errors }}{{ form.ActivityProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.GravitySensorProbe.errors }}
+			{{ form.GravitySensorProbe }} <label for="GravitySensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Gravity_Sensor">Gravity Sensor</a> every </label>{{ form.GravitySensorProbe_freq.errors }}{{ form.GravitySensorProbe_freq }} seconds for {{ form.GravitySensorProbe_duration.errors }}{{ form.GravitySensorProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.GyroscopeSensorProbe.errors }}
+			{{ form.GyroscopeSensorProbe }} <label for="GyroscopeSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Gyroscope_Sensor">Gyroscope Sensor</a> every </label>{{ form.GyroscopeSensorProbe_freq.errors }}{{ form.GyroscopeSensorProbe_freq }} seconds for {{ form.GyroscopeSensorProbe_duration.errors }}{{ form.GyroscopeSensorProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.LinearAccelerationProbe.errors }}
+			{{ form.LinearAccelerationProbe }} <label for="LinearAccelerationProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Linear_Acceleration_Sensor">Linear Acceleration Sensor</a> every </label>{{ form.LinearAccelerationProbe_freq.errors }}{{ form.LinearAccelerationProbe_freq }} seconds for {{ form.LinearAccelerationProbe_duration.errors }}{{ form.LinearAccelerationProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.OrientationSensorProbe.errors }}
+			{{ form.OrientationSensorProbe }} <label for="OrientationSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Orientation_Sensor">Orientation Sensor</a> every </label>{{ form.OrientationSensorProbe_freq.errors }}{{ form.OrientationSensorProbe_freq }} seconds for {{ form.OrientationSensorProbe_duration.errors }}{{ form.OrientationSensorProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.RotationVectorSensorProbe.errors }}
+			{{ form.RotationVectorSensorProbe }} <label for="RotationVectorSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Rotation_Vector_Sensor">Rotation Vector Sensor</a> every </label>{{ form.RotationVectorSensorProbe_freq.errors }}{{ form.RotationVectorSensorProbe_freq }} seconds for {{ form.RotationVectorSensorProbe_duration.errors }}{{ form.RotationVectorSensorProbe_duration }} seconds
+		</div>
+		<h3>Positioning</h3>
+		<hr />
+		<div class="fieldWrapper">
+			{{ form.LocationProbe.errors }}
+			{{ form.LocationProbe }} <label for="LocationProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Location">Location</a> every </label>{{ form.LocationProbe_freq.errors }}{{ form.LocationProbe_freq }} seconds for {{ form.LocationProbe_duration.errors }}{{ form.LocationProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.BluetoothProbe.errors }}
+			{{ form.BluetoothProbe }} <label for="BluetoothProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Bluetooth">Bluetooth</a> every </label>{{ form.BluetoothProbe_freq.errors }}{{ form.BluetoothProbe_freq }} seconds for {{ form.BluetoothProbe_duration.errors }}{{ form.BluetoothProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.CellProbe.errors }}
+			{{ form.CellProbe }} <label for="CellProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Cell">Cell Towers</a> every </label>{{ form.CellProbe_freq.errors }}{{ form.CellProbe_freq }} seconds for {{ form.CellProbe_duration.errors }}{{ form.CellProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
+			{{ form.WifiProbe.errors }}
+			{{ form.WifiProbe }} <label for="WifiProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Wifi">Wifi Devices</a> every </label>{{ form.WifiProbe_freq.errors }}{{ form.WifiProbe_freq }} seconds for {{ form.WifiProbe_duration.errors }}{{ form.WifiProbe_duration }} seconds
+		</div>
+		<h3>Social</h3>
+		<hr />
+		<div class="fieldWrapper">
+	        {{ form.CallLogProbe.errors }}
+	        {{ form.CallLogProbe }} <label for="CallLogProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Call_Log">Call Logs</a> every </label>{{ form.CallLogProbe_freq.errors }}{{ form.CallLogProbe_freq }} seconds
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.ContactProbe.errors }}
+	        {{ form.ContactProbe }} <label for="ContactProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Contact">Contacts</a> every </label>{{ form.ContactProbe_freq.errors }}{{ form.ContactProbe_freq }} seconds
+	    </div>
+		<div class="fieldWrapper">
+	        {{ form.SMSProbe.errors }}
+	        {{ form.SMSProbe }} <label for="SMSProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#SMS">SMS Logs</a> every </label>{{ form.SMSProbe_freq.errors }}{{ form.SMSProbe_freq }} seconds
+	    </div>
+	    <br />
+		<input type="submit" value="Create your App!" />
+	</form>
+
+	<!-- <p class="centeredLink"><a href="{% url studywizard.views.app_list %}">Create your App!</a></p> -->
+</div>
+{% endblock %}

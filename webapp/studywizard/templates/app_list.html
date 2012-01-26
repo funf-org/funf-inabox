@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Apps{% endblock %}
+{% block title %}Funf in a Box - Apps{% endblock %}
 
 {% block content %}
-<p>{{ apps }}</p>
+<div id="mainCenter">
+    <img id="logo" src="{{ STATIC_URL }}images/funfinabox.png" />
+    <hr />
+
+    <h3>Your current apps...</h3>
+    <p>{{ apps }}</p>
+
+    <h3>One thing before you start...</h3>
+    <p>It's not our fault if you do anything stupid with Funf in a Box. So, if you get in trouble or do something crazy then don't come complaining to us.</p>
+	<p class="centeredLink"><a href="{% url studywizard.views.app_create %}">Create a New App!</a></p>
+</div>
 {% endblock %}

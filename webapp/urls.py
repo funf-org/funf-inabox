@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     url(r'^dropbox/auth/result/$', views.post_dropbox_auth),
     url(r'^dropbox/auth/failed/$', direct_to_template, {'template': 'failed_dropbox_auth.html'}, name='failed_dropbox_auth'),
     url(r'^apps/$', views.app_list),
+    url(r'^create/$', views.app_create),
+    url(r'^thanks/$', views.app_thanks),
     # Examples:
     # url(r'^$', 'webapp.views.home', name='home'),
     # url(r'^webapp/', include('webapp.foo.urls')),

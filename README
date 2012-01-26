@@ -13,3 +13,7 @@ pip install -r requirements.txt
 Required environment variables:
 DROPBOX_APP_KEY
 DROPBOX_APP_SECRET
+
+
+Initialize the database:
+python manage.py syncdb

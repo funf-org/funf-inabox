@@ -3,6 +3,8 @@ from dropbox import client, rest, session
 import os
 from django.shortcuts import redirect, render
 from django.core.urlresolvers import reverse
+from forms import CreateAppForm
+import datetime
 
 APP_KEY = os.environ['DROPBOX_APP_KEY']
 APP_SECRET = os.environ['DROPBOX_APP_SECRET']
@@ -38,7 +40,8 @@ def post_dropbox_auth(request):
     if access_token:
         request.session["dropbox_access_token"] = access_token.key
         request.session["dropbox_access_token_secret"] = access_token.secret
-        return redirect(app_list)
+        #return redirect(app_list)
+        return redirect(app_create)
     else:
         return redirect('failed_dropbox_auth')
 
@@ -49,6 +52,46 @@ def app_list(request):
     folder_metadata = client.metadata('/')
     folder_names = [metadata["path"][1:] for metadata in folder_metadata["contents"] if metadata["is_dir"]]
     return render(request, "app_list.html", {"apps": folder_names})
+
+def app_create(request):
+    client = db_client(request)
+    if not client:
+        return redirect(dropbox_auth)
+    
+    if request.method == 'POST': # If the form has been submitted...
+        form = CreateAppForm(request.POST) # A form bound to the POST data
+        if form.is_valid(): # All validation rules pass
+            # Process the data in form.cleaned_data
+            app_form_vars = {}
+            app_probe_vars = {}
+            for field_name in form.cleaned_data.keys():
+                if not field_name.endswith('Probe') and not field_name.endswith('freq') and not field_name.endswith('duration'):
+                    app_form_vars[field_name] = form.cleaned_data[field_name]
+                elif not field_name.endswith('freq') and not field_name.endswith('duration') and not form.cleaned_data[field_name] == False:
+                    try:
+                        app_probe_vars[field_name] = {}
+                        app_probe_vars[field_name]['PERIOD'] = int(form.cleaned_data[field_name + '_freq'])
+                        app_probe_vars[field_name]['DURATION'] = int(form.cleaned_data[field_name + '_duration'])
+                    except:
+                        pass
+            print app_form_vars
+            print app_probe_vars
+
+                #app_form_vars[]
+            return redirect('/thanks/') # Redirect after POST
+    else:
+        form = CreateAppForm() # An unbound form
+
+    return render(request, 'app_create.html', {'form': form})
+
+
+    folder_metadata = client.metadata('/')
+    folder_names = [metadata["path"][1:] for metadata in folder_metadata["contents"] if metadata["is_dir"]]
+    return render(request, "app_create.html", {"apps": folder_names})
+
+def app_thanks(request):
+    now = datetime.datetime.now()
+    return render(request, "thanks.html", {"current_time": now})
 
 
 def test(request):

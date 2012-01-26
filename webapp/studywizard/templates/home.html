@@ -3,7 +3,15 @@
 {% block title %}Funf in a Box{% endblock %}
 
 {% block content %}
-<p>Welcome to Funf in a Box.</p>
+<div id="mainCenter">
+    <img id="logo" src="{{ STATIC_URL }}images/funfinabox.png" />
+    <hr />
 
-<a href="{% url studywizard.views.app_list %}">See your apps</a>
+    <h3>What it is...</h3>
+    <p>Funf in a Box helps you create your own mobile sensing android app - no programming required. Simply connect your dropbox account, check off the data you want to collect, and the app (and later, your data) will appear in your Dropbox. Take the app, distribute it manually or through the Android Market for a study. Then forget about managing a server for data collection. It's all in your Dropbox. Wherever you are.</p>
+
+    <h3>One thing before you start...</h3>
+    <p>It's not our fault if you do anything stupid with Funf in a Box. So, if you get in trouble or do something idiotic then don't come complaining to us. Additionally, your Funf in a Box will never threaten to stab you, and in fact cannot speak. If your Funf in a Box does speak, please disregard its advice.</p>
+	<p class="centeredLink"><a href="{% url studywizard.views.app_create %}">Get Started!</a></p>
+</div>
 {% endblock %}
