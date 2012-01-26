@@ -5,6 +5,8 @@ from django.shortcuts import redirect, render
 from django.core.urlresolvers import reverse
 from forms import CreateAppForm
 import datetime
+import json
+import fnmatch
 
 APP_KEY = os.environ['DROPBOX_APP_KEY']
 APP_SECRET = os.environ['DROPBOX_APP_SECRET']
@@ -54,19 +56,23 @@ def app_list(request):
     return render(request, "app_list.html", {"apps": folder_names})
 
 def app_create(request):
+    #Dropbox auth
     client = db_client(request)
     if not client:
         return redirect(dropbox_auth)
     
-    if request.method == 'POST': # If the form has been submitted...
+    #If form submitted
+    if request.method == 'POST':
         form = CreateAppForm(request.POST) # A form bound to the POST data
-        if form.is_valid(): # All validation rules pass
+        if form.is_valid():
             # Process the data in form.cleaned_data
             app_form_vars = {}
             app_probe_vars = {}
             for field_name in form.cleaned_data.keys():
+                #General app info
                 if not field_name.endswith('Probe') and not field_name.endswith('freq') and not field_name.endswith('duration'):
                     app_form_vars[field_name] = form.cleaned_data[field_name]
+                #Probe info
                 elif not field_name.endswith('freq') and not field_name.endswith('duration') and not form.cleaned_data[field_name] == False:
                     try:
                         app_probe_vars[field_name] = {}
@@ -74,10 +80,12 @@ def app_create(request):
                         app_probe_vars[field_name]['DURATION'] = int(form.cleaned_data[field_name + '_duration'])
                     except:
                         pass
-            print app_form_vars
-            print app_probe_vars
+            
+            #Create json config for app creation
+            config_dict = create_app_config(app_form_vars, app_probe_vars)
+            config_json = json.dumps(config_dict)
+            print config_json
 
-                #app_form_vars[]
             return redirect('/thanks/') # Redirect after POST
     else:
         form = CreateAppForm() # An unbound form
@@ -92,6 +100,41 @@ def app_create(request):
 def app_thanks(request):
     now = datetime.datetime.now()
     return render(request, "thanks.html", {"current_time": now})
+
+
+def create_app_config(app_form_vars, app_probe_vars):
+    config_dict = {}
+    config_dict['name'] = app_form_vars['app_name']
+    config_dict['version'] = 1
+    config_dict['dataRequests'] = {}
+
+    for key in app_probe_vars.keys():
+        period_duration = {}
+        try:
+            period_duration['PERIOD'] = app_probe_vars[key]['PERIOD']
+            period_duration['DURATION'] = app_probe_vars[key]['DURATION']
+        except:
+            pass
+        config_dict['dataRequests']['edu.mit.media.funf.probe.builtin.' + key] = [period_duration]
+
+    return config_dict
+
+
+def copy_to_dropbox(root_path, dropbox_folder_name):
+    root_length = len(root_path)
+    pattern = '*'
+
+    for root, dirs, files in os.walk(root_path):
+        #Strip everything up until our root directory
+        short_root = '/' + dropbox_folder_name + '/' + root[root_length+1:]
+        if not '.' in short_root:
+            response = client.file_create_folder(short_root)
+
+            #Copy files to dropbox
+            for filename in fnmatch.filter(files, pattern):
+                print short_root + filename
+                f = open(filename)
+                response = client.put_file(os.path.join(short_root, filename), f)
 
 
 def test(request):
