@@ -12,8 +12,37 @@
             </intent-filter>
         </activity>
         
+        <!-- Framework services -->
+        <service android:name=".DropboxPipeline"></service>
+        <service android:name=".DropboxUploadService"></service>
+        <service android:name="edu.mit.media.funf.storage.NameValueDatabaseService"></service>
+        
+        <receiver android:name=".LauncherReceiver" android:enabled="true" >
+        	<intent-filter>
+        		<action android:name="android.intent.action.BATTERY_CHANGED" />
+        		<action android:name="android.intent.action.BOOT_COMPLETED" />
+        		<action android:name="android.intent.action.DOCK_EVENT" />
+        		<action android:name="android.intent.action.ACTION_SCREEN_ON" />
+        		<action android:name="android.intent.action.USER_PRESENT" />
+        	</intent-filter>
+        </receiver>
+        
         __SERVICES__
     </application>
+    
+    <!-- Battery Probe and launching -->
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+    
+
+    <!-- All probes -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    
+    <!-- Backing up database to SD card -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> 
+    
+    <!-- Backing up to the web -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    
     
     __PERMISSIONS__
 </manifest> 

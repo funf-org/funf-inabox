@@ -37,19 +37,11 @@ keyalias = 'release'
 _unknown = "Unknown"
 
 _all_permisssions = '''
-    <!-- Battery Probe and launching -->
-    <uses-permission android:name="android.permission.BATTERY_STATS" />
-    
-
-    <!-- All probes -->
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    
     <!-- Location probe, Cell probe -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> 
     
     <!-- Location probe -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>   
-    
     
     <!-- Wifi and Hardware Info probes -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/> 
@@ -72,12 +64,6 @@ _all_permisssions = '''
     <!-- Call Log and Contact probes -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     
-    <!-- Backing up database to SD card -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> 
-    
-    <!-- Backing up to the web -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    
     <!--  SMS Probe -->
     <uses-permission android:name="android.permission.READ_SMS" />
     
@@ -86,15 +72,6 @@ _all_permisssions = '''
     
     <!-- Running Audio features probe -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    
-    <!-- Backing up database to SD card -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> 
-    
-    <!-- Backing up to the web -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    
-    <!-- Accounts Probe -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     
     <!-- DatabaseService, Archive service (unique ids) -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -159,8 +136,10 @@ android_app_template = os.path.join(script_dir, 'android_app_template')
 dir_template = os.path.join(script_dir, 'dir_template')
 invalid_filename_chars = r'[^A-Za-z0-9_ \-\.\(\)]*'
 invalid_id_chars = r'[^A-Za-z0-9_]*'
+DROPBOX_APP_KEY = os.environ['DROPBOX_APP_KEY']
+DROPBOX_APP_SECRET = os.environ['DROPBOX_APP_SECRET']
 
-def generate(dir_path, user_id, name, description, contact_email, funf_conf):
+def generate(dir_path, user_id, dropbox_token, dropbox_token_secret, name, description, contact_email, funf_conf):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
     dir_filename = re.sub(invalid_filename_chars, '', name)
@@ -216,7 +195,11 @@ def generate(dir_path, user_id, name, description, contact_email, funf_conf):
                          'inabox.app.services': services,
                          'inabox.app.permissions': permissions,
                          'inabox.app.probes': probes,
-                         'inabox.app.password': encryption_password
+                         'inabox.app.password': encryption_password,
+                         'inabox.dropbox.appkey': DROPBOX_APP_KEY,
+                         'inabox.dropbox.appsecret': DROPBOX_APP_SECRET,
+                         'inabox.dropbox.token': dropbox_token,
+                         'inabox.dropbox.tokensecret': dropbox_token_secret,
                          }
     print inabox_properties
     
