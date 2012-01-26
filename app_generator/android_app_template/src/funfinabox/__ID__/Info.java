@@ -12,5 +12,6 @@ public class Info extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        String test = "__PASSWORD__";
     }
 }

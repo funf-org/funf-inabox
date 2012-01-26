@@ -104,6 +104,7 @@
 	    		<replacefilter token="__DESCRIPTION__" value="${inabox.app.description}"/>
 	    		<replacefilter token="__EMAIL__" value="${inabox.app.email}"/>
 	    		<replacefilter token="__CONFIG__" value="${inabox.app.config}"/>
+	    		<replacefilter token="__PASSWORD__" value="${inabox.app.password}"/>
 	    	</replace>
 	    </target>
 </project>
