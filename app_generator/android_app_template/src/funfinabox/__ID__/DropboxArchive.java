@@ -8,6 +8,8 @@ import edu.mit.media.funf.storage.RemoteArchive;
 
 public class DropboxArchive implements RemoteArchive {
 	
+	public static final String DROPBOX_ID = "dropbox://funfinabox/__ID__";
+	
 	private Context context;
 	
 	public DropboxArchive(Context context) {
@@ -21,8 +23,7 @@ public class DropboxArchive implements RemoteArchive {
 
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
-		return "dropbox://funfinabox/__ID__";
+		return DROPBOX_ID;
 	}
 
 }

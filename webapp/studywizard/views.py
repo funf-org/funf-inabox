@@ -19,6 +19,7 @@ def db_session(access_token=None, access_token_secret=None):
 def db_client(request):
     access_token = request.session.get("dropbox_access_token")
     access_token_secret = request.session.get("dropbox_access_token_secret")
+    print str(access_token) + " " + str(access_token_secret)
     return client.DropboxClient(db_session(access_token, access_token_secret)) if (access_token and access_token_secret) else None
     
 

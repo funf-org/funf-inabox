@@ -1,7 +1,7 @@
 package funfinabox.__ID__;
 
-import static funfinabox.__ID__.Info.TAG;
 import static edu.mit.media.funf.AsyncSharedPrefs.async;
+import static funfinabox.__ID__.Info.TAG;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,20 +10,21 @@ import java.util.ArrayList;
 
 import org.json.JSONException;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import edu.mit.media.funf.IOUtils;
 import edu.mit.media.funf.Utils;
 import edu.mit.media.funf.configured.ConfiguredPipeline;
 import edu.mit.media.funf.configured.FunfConfig;
 import edu.mit.media.funf.probe.Probe;
-import edu.mit.media.funf.probe.ProbeUtils;
 import edu.mit.media.funf.storage.BundleSerializer;
+import edu.mit.media.funf.storage.UploadService;
 
 
 public class DropboxPipeline extends ConfiguredPipeline{
@@ -36,10 +37,102 @@ public class DropboxPipeline extends ConfiguredPipeline{
 	public static final String ACTION_RUN_ONCE = "RUN_ONCE";
 	public static final String RUN_ONCE_PROBE_NAME = "PROBE_NAME";
 	
+	/// HACK USED TO OVERRIDE BUG #78
+	public void ensureServicesAreRunning() {
+		Log.i(TAG, "DropboxPipeline ensuring services are running");
+		if (isEnabled()) {
+			scheduleAlarms();
+			sendProbeRequests();
+		}
+	}
+	private void scheduleAlarms() {
+		Log.i(TAG, "DropboxPipeline scheduling alarms");
+		FunfConfig config = getConfig();
+		scheduleAlarm(ACTION_UPDATE_CONFIG, config.getConfigUpdatePeriod());
+		scheduleAlarm(ACTION_ARCHIVE_DATA, config.getDataArchivePeriod());
+		scheduleAlarm(ACTION_UPLOAD_DATA, config.getDataUploadPeriod());
+	}
+	
+	private void scheduleAlarm(String action, long delayInSeconds) {
+		Log.i(TAG, "DropboxPipeline scheduling alarm for " + action + " in " + delayInSeconds + " seconds");
+		Intent i = new Intent(this, getClass());
+		i.setAction(action);
+		Log.i(TAG, "DropboxPipeline intent info " + i.getComponent() + " " + i.getAction());
+		boolean noAlarmExists = (PendingIntent.getService(this, 0, i, PendingIntent.FLAG_NO_CREATE) == null);
+		if (noAlarmExists) {
+			PendingIntent pi = PendingIntent.getService(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+			Log.i(TAG, "DropboxPipeline pi info " + pi.toString());
+			try {
+				pi.send();
+			} catch (CanceledException e) {
+				Log.i(TAG, "DropboxPipeline pi was cancelled");
+			}
+			AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+			long delayInMilliseconds = Utils.secondsToMillis(delayInSeconds);
+			long startTimeInMilliseconds = System.currentTimeMillis() + delayInMilliseconds;
+			Log.i(TAG, "Scheduling alarm for '" + action + "' at " + Utils.millisToSeconds(startTimeInMilliseconds) + " and every " + delayInSeconds  + " seconds");
+			// Inexact repeating doesn't work unlesss interval is 15, 30 min, or 1, 6, or 24 hours
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, startTimeInMilliseconds, delayInMilliseconds, pi);
+		} else {
+			Log.i(TAG, "DropboxPipeline alarm already exists");
+		}
+	}
+	
+	public void onSharedPreferenceChanged (SharedPreferences sharedPreferences, String key) {
+		Log.i(TAG, "Shared Prefs changed");
+		if (sharedPreferences.equals(getConfig().getPrefs())) {
+			Log.i(TAG, "Configuration changed");
+			onConfigChange(getConfig().toString(true));
+			if (FunfConfig.isDataRequestKey(key)) {
+				if (isEnabled()) {
+					String probeName = FunfConfig.keyToProbename(key);
+					sendProbeRequest(probeName);
+				}
+			} else if (FunfConfig.CONFIG_UPDATE_PERIOD_KEY.equals(key)) {
+				cancelAlarm(ACTION_UPDATE_CONFIG);
+			} else if (FunfConfig.DATA_ARCHIVE_PERIOD_KEY.equals(key)) {
+				cancelAlarm(ACTION_ARCHIVE_DATA);
+			} else if (FunfConfig.DATA_UPLOAD_PERIOD_KEY.equals(key)) {
+				cancelAlarm(ACTION_UPLOAD_DATA);
+			}
+			if (isEnabled()) {
+				scheduleAlarms();
+			}
+			
+		} else if (sharedPreferences.equals(getSystemPrefs()) && ENABLED_KEY.equals(key)) {
+			Log.i(TAG, "System prefs changed");
+			reload();
+		}
+	}
+	
+	public void reload() {
+		cancelAlarms();
+		super.reload();
+	}
+	
+	private void cancelAlarms() {
+		cancelAlarm(ACTION_UPDATE_CONFIG);
+		cancelAlarm(ACTION_ARCHIVE_DATA);
+		cancelAlarm(ACTION_UPLOAD_DATA);
+	}
+	
+	private void cancelAlarm(String action) {
+		Intent i = new Intent(this, getClass());
+		i.setAction(action);
+		PendingIntent pi = PendingIntent.getService(this, 0, i, PendingIntent.FLAG_NO_CREATE);
+		if (pi != null) {
+			AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+			alarmManager.cancel(pi);
+			pi.cancel();
+		}
+	}
+	/////////////////////////////
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		Log.i(TAG, "Main Pipeline CREATED!");
+		setEncryptionPassword("__PASSWORD__".toCharArray());
 	}
 	
 	@Override
@@ -49,6 +142,7 @@ public class DropboxPipeline extends ConfiguredPipeline{
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
+		Log.i(TAG, "DropboxPipeline intent: " + intent.getAction());
 		if (ACTION_RUN_ONCE.equals(intent.getAction())) {
 			String probeName = intent.getStringExtra(RUN_ONCE_PROBE_NAME);
 			runProbeOnceNow(this, probeName);
@@ -62,14 +156,26 @@ public class DropboxPipeline extends ConfiguredPipeline{
 
 	@Override
 	public void updateConfig() {
-		// TODO Auto-generated method stub
-		super.updateConfig();
+		String config = DropboxUtil.getConfig(this);
+		super.updateConfig(config);
 	}
 
 	@Override
 	public void uploadData() {
-		// TODO Auto-generated method stub
-		super.uploadData();
+		Log.i(TAG, "Dropbox pipeline launching Upload");
+		archiveData();
+		String archiveName = getPipelineName();
+		String uploadUrl = DropboxArchive.DROPBOX_ID;
+		Intent i = new Intent(this, getUploadServiceClass());
+		i.putExtra(UploadService.ARCHIVE_ID, archiveName);
+		i.putExtra(UploadService.REMOTE_ARCHIVE_ID, uploadUrl);
+		startService(i);
+		getSystemPrefs().edit().putLong(LAST_DATA_UPLOAD, System.currentTimeMillis()).commit();
+	}
+	
+	@Override
+	public Class<? extends UploadService> getUploadServiceClass() {
+		return DropboxUploadService.class;
 	}
 
 	@Override
