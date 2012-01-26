@@ -1,4 +1,7 @@
 # Django settings for webapp project.
+# TEMPORARY PATH ALTERATIONS
+import sys
+sys.path.append('../app_generator')
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

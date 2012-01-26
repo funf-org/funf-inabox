@@ -7,6 +7,10 @@ from forms import CreateAppForm
 import datetime
 import json
 import fnmatch
+import threading
+import genfunfapp
+import tempfile
+import shutil
 
 APP_KEY = os.environ['DROPBOX_APP_KEY']
 APP_SECRET = os.environ['DROPBOX_APP_SECRET']
@@ -56,6 +60,26 @@ def app_list(request):
     folder_names = [metadata["path"][1:] for metadata in folder_metadata["contents"] if metadata["is_dir"]]
     return render(request, "app_list.html", {"apps": folder_names})
 
+
+class CreateAppThread(threading.Thread):
+    
+    def __init__(self, db_client, user_id, dropbox_token, dropbox_token_secret, name, description, contact_email, funf_conf):
+        super(CreateAppThread, self).__init__()
+        self.db_client = db_client
+        self.user_id = user_id
+        self.dropbox_token = dropbox_token
+        self.dropbox_token_secret = dropbox_token_secret
+        self.name = name
+        self.description = description
+        self.contact_email = contact_email
+        self.funf_conf = funf_conf
+            
+    def run(self):
+        temp_dir = tempfile.mkdtemp(prefix="funfinabox") 
+        app_dir = genfunfapp.generate(temp_dir, self.user_id, self.dropbox_token, self.dropbox_token_secret, self.name, self.description, self.contact_email, self.funf_conf)
+        copy_to_dropbox(self.db_client, app_dir, os.path.basename(app_dir))
+        shutil.rmtree(temp_dir)
+
 def app_create(request):
     #Dropbox auth
     client = db_client(request)
@@ -85,7 +109,15 @@ def app_create(request):
             #Create json config for app creation
             config_dict = create_app_config(app_form_vars, app_probe_vars)
             config_json = json.dumps(config_dict)
+            print app_form_vars
             print config_json
+            
+            dropbox_account_info = client.account_info()
+            access_token = request.session.get("dropbox_access_token")
+            access_token_secret = request.session.get("dropbox_access_token_secret")
+            
+            t = CreateAppThread(client, dropbox_account_info["uid"], access_token, access_token_secret, app_form_vars["app_name"], app_form_vars["description"], app_form_vars["contact_email"], config_json)
+            t.start()
 
             return redirect('/thanks/') # Redirect after POST
     else:
@@ -94,9 +126,9 @@ def app_create(request):
     return render(request, 'app_create.html', {'form': form})
 
 
-    folder_metadata = client.metadata('/')
-    folder_names = [metadata["path"][1:] for metadata in folder_metadata["contents"] if metadata["is_dir"]]
-    return render(request, "app_create.html", {"apps": folder_names})
+    #folder_metadata = client.metadata('/')
+    #folder_names = [metadata["path"][1:] for metadata in folder_metadata["contents"] if metadata["is_dir"]]
+    #return render(request, "app_create.html", {"apps": folder_names})
 
 def app_thanks(request):
     now = datetime.datetime.now()
@@ -121,7 +153,7 @@ def create_app_config(app_form_vars, app_probe_vars):
     return config_dict
 
 
-def copy_to_dropbox(root_path, dropbox_folder_name):
+def copy_to_dropbox(db_client, root_path, dropbox_folder_name):
     root_length = len(root_path)
     pattern = '*'
 
@@ -129,13 +161,13 @@ def copy_to_dropbox(root_path, dropbox_folder_name):
         #Strip everything up until our root directory
         short_root = '/' + dropbox_folder_name + '/' + root[root_length+1:]
         if not '.' in short_root:
-            response = client.file_create_folder(short_root)
+            response = db_client.file_create_folder(short_root)
 
             #Copy files to dropbox
             for filename in fnmatch.filter(files, pattern):
                 print short_root + filename
-                f = open(filename)
-                response = client.put_file(os.path.join(short_root, filename), f)
+                f = open(os.path.join(root, filename))
+                response = db_client.put_file(os.path.join(short_root, filename), f)
 
 
 def test(request):
