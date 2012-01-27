@@ -168,7 +168,7 @@ def copy_to_dropbox(db_client, root_path, dropbox_folder_name, abort_count = 0):
         for root, dirs, files in os.walk(root_path):
             #Strip everything up until our root directory
             short_root = '/' + dropbox_folder_name + '/' + root[root_length+1:]
-            if not '.' in short_root:
+            if not '/.' in short_root:
                 folder_success = copy_folder_to_dropbox(db_client, short_root)
                 if folder_success == False:
                     raise CopyError
