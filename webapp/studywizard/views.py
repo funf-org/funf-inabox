@@ -116,10 +116,8 @@ def app_create(request):
             access_token = request.session.get("dropbox_access_token")
             access_token_secret = request.session.get("dropbox_access_token_secret")
             
-            # t = CreateAppThread(client, dropbox_account_info["uid"], access_token, access_token_secret, app_form_vars["app_name"], app_form_vars["description"], app_form_vars["contact_email"], config_json)
-            # t.start()
-
-            copy_to_dropbox(client, '/Users/cody/Dropbox/docs-projects/funf-open-sensing-framework.inabox/webapp/studywizard/static', 'test1')
+            t = CreateAppThread(client, dropbox_account_info["uid"], access_token, access_token_secret, app_form_vars["app_name"], app_form_vars["description"], app_form_vars["contact_email"], config_json)
+            t.start()
 
             return redirect('/thanks/') # Redirect after POST
     else:
