@@ -142,7 +142,7 @@ DROPBOX_APP_SECRET = os.environ['DROPBOX_APP_SECRET']
 def generate(dir_path, user_id, dropbox_token, dropbox_token_secret, name, description, contact_email, funf_conf):
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
-    dir_filename = re.sub(invalid_filename_chars, '', name)
+    dir_filename = re.sub(invalid_filename_chars, '', name).strip()
     destination_dir = os.path.join(dir_path, dir_filename)
     if os.path.exists(destination_dir):
         raise Exception("Directory already exists")
