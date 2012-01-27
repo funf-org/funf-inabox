@@ -4,7 +4,7 @@ import os
 from django.shortcuts import redirect, render
 from django.core.urlresolvers import reverse
 from forms import CreateAppForm
-import datetime
+import time, datetime
 import json
 import fnmatch
 import threading
@@ -153,21 +153,71 @@ def create_app_config(app_form_vars, app_probe_vars):
     return config_dict
 
 
-def copy_to_dropbox(db_client, root_path, dropbox_folder_name):
+class CopyError(Exception):
+    def __init__(self, value):
+        self.value = value
+    def __str__(self):
+        return repr(self.value)
+
+def copy_to_dropbox(db_client, root_path, dropbox_folder_name, abort_count = 0):
     root_length = len(root_path)
     pattern = '*'
 
-    for root, dirs, files in os.walk(root_path):
-        #Strip everything up until our root directory
-        short_root = '/' + dropbox_folder_name + '/' + root[root_length+1:]
-        if not '.' in short_root:
-            response = db_client.file_create_folder(short_root)
+    try:
+        print root_path
+        for root, dirs, files in os.walk(root_path):
+            #Strip everything up until our root directory
+            short_root = '/' + dropbox_folder_name + '/' + root[root_length+1:]
+            if not '.' in short_root:
+                folder_success = copy_folder_to_dropbox(db_client, short_root)
+                if folder_success == False:
+                    raise CopyError
 
-            #Copy files to dropbox
-            for filename in fnmatch.filter(files, pattern):
-                print short_root + filename
-                f = open(os.path.join(root, filename))
-                response = db_client.put_file(os.path.join(short_root, filename), f)
+                #Copy files to dropbox
+                for filename in fnmatch.filter(files, pattern):
+                    if not filename.startswith('.'):
+                        print short_root + filename
+                        f = open(os.path.join(root, filename))
+                        file_success = copy_file_to_dropbox(db_client, short_root, filename, f)
+                        if file_success == False:
+                            raise CopyError
+
+    except CopyError:
+        if abort_count < 5:
+            time.sleep(300)
+            copy_to_dropbox(db_client, root_path, dropbox_folder_name, abort_count = abort_count + 1)
+
+def copy_file_to_dropbox(db_client, short_root, filename, f):
+    copy_success = True
+
+    try:
+        response = db_client.put_file(os.path.join(short_root, filename), f, overwrite=True)
+    except rest.ErrorResponse as inst:
+        print inst
+        time.sleep(30)
+        try:
+            response = db_client.put_file(os.path.join(short_root, filename), f, overwrite=True)
+        except:
+            copy_success = False
+
+    return copy_success
+
+def copy_folder_to_dropbox(db_client, short_root):
+    copy_success = True
+
+    try:
+        response = db_client.file_create_folder(short_root)
+    except rest.ErrorResponse as inst:
+        if not str(inst).startswith('[403]'): #folder already exists
+            print inst
+            time.sleep(30)
+            try:
+                response = db_client.file_create_folder(short_root)
+            except:
+                copy_success = False
+
+    return copy_success
+
 
 
 def test(request):
