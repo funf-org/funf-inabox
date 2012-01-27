@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- A custom theme that is a variation on the light them with a different
+         background color. -->
+    <color name="logo_color">#97c024</color>
+    <color name="text_color">#272727</color>
+    <color name="background_color">#FFFFFF</color>
+    
+
+</resources>

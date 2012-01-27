@@ -3,10 +3,13 @@
     <string name="app_name">__NAME__</string>
     <string name="app_id">__ID__</string>
     <string name="description">__DESCRIPTION__</string>
-    <string name="contact_email">__EMAIL__</string>
+    <string name="contact_email"><a href="mailto:__EMAIL__">__EMAIL__</a></string>
     <string name="probes">__PROBES__</string>
     <string name="config">__CONFIG__</string>
     <string name="have_questions">If you have questions, contact:</string>
     <string name="app_records">This app records:</string>
-    <string name="by_funf">made using Funf In A Box</string>
+    <string name="opt_out">To opt out of the study and stop sharing data:</string>
+    <string name="uninstall">Uninstall this App</string>
+    <string name="made_by">made by</string>
+    <string name="funf_in_a_box">Funf In A Box</string>
 </resources>

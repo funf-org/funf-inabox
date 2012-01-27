@@ -1,43 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/background_color"
     >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/app_name"
-    />
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/description"
-    />
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/app_records"
-    />
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/probes"
-    />
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/have_questions"
-    />
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/contact_email"
-    />
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/by_funf"
-    />
-</LinearLayout>
+    
+    
+	<LinearLayout 
+	    android:orientation="vertical"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:padding="5dip"
+	    >
+		<LinearLayout 
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:paddingTop="10dip"
+		    android:paddingBottom="20dip"
+		    >
+			<TextView  
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/app_name"
+			    android:gravity="center"
+			    android:textSize="30sp"
+			    android:textStyle="bold"
+			    android:textColor="@color/logo_color"
+			    
+			    />
+			<TextView  
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/description"
+			    android:gravity="center"
+			    android:textSize="14sp"
+			    android:textColor="@color/text_color"
+			    />
+		</LinearLayout>
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:paddingTop="10dip"
+		    android:paddingBottom="10dip"
+		    >
+			<TextView  
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/app_records"
+			    android:gravity="center"
+			    android:textColor="@color/text_color"
+			    android:textStyle="bold"
+			    />
+			<TextView  
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/probes"
+			    android:gravity="center"
+			    android:textColor="@color/text_color"
+			    />
+		</LinearLayout>
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:paddingTop="10dip"
+		    android:paddingBottom="10dip"
+		    >
+			<TextView  
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/have_questions"
+			    android:gravity="center"
+			    android:textColor="@color/text_color"
+			    android:textStyle="bold"
+			    />
+			
+			<TextView  android:id="@+id/contact_email"
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/contact_email"
+			    android:gravity="center"
+			    android:linksClickable="true"
+			    android:textColor="@color/text_color"
+			    />
+		
+		</LinearLayout>
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		    android:orientation="vertical"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    
+		    android:paddingTop="40dip"
+		    android:paddingBottom="10dip"
+		    >
+			<TextView  
+			    android:layout_width="fill_parent" 
+			    android:layout_height="wrap_content" 
+			    android:text="@string/opt_out"
+			    android:gravity="center"
+			    android:textColor="@color/text_color"
+			    />
+			<Button  android:id="@+id/uninstall_button" 
+			    android:layout_width="wrap_content" 
+			    android:layout_height="wrap_content"
+			    android:gravity="center" 
+			    android:layout_gravity="center"
+			    android:text="@string/uninstall"
+			    />
+		</LinearLayout>
+	</LinearLayout>
+
+
+	<LinearLayout
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:orientation="vertical" 
+	    android:paddingTop="10dip"
+	    android:paddingBottom="5dip"
+	    android:layout_alignParentBottom="true">
+	
+		<TextView  
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="@string/made_by"
+		    android:gravity="center"
+		    />
+		<ImageView android:id="@+id/logo_button" 
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:src="@drawable/funfinabox_small"
+		    android:contentDescription="@string/funf_in_a_box"/>
+	</LinearLayout>
+</RelativeLayout>
 
