@@ -1,2 +1,6 @@
 Install python-dev, sqlite, libsqlite3-dev
 pip install -r requirements.txt
+
+For py2app (for building a standalone mac app):
+py2applet --make-setup process_data.py
+python setup.py py2app

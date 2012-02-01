@@ -27,7 +27,11 @@ import sys
 import glob
 
 script_dir = os.path.abspath(os.path.dirname(inspect.getfile(inspect.currentframe())))
-root_app_dir = os.path.join(script_dir, 'test')#os.path.abspath(os.path.join(script_dir, '..'))
+#Check if this is in a mac app.
+if script_dir.endswith('.app/Contents/Resources'):
+    root_app_dir = os.path.abspath(os.path.join(script_dir, '../../../..'))
+else:
+    root_app_dir = os.path.abspath(os.path.join(script_dir, '..'))
 data_dir = os.path.join(root_app_dir,"data")
 processing_file = os.path.join(data_dir, 'PROCESSING_DATA')
 processing_failed_file = os.path.join(data_dir, 'PROCESSING_FAILED')
