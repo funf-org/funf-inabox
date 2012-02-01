@@ -119,7 +119,7 @@ def app_create(request):
             t = CreateAppThread(client, dropbox_account_info["uid"], access_token, access_token_secret, app_form_vars["app_name"], app_form_vars["description"], app_form_vars["contact_email"], config_json)
             t.start()
 
-            return redirect('/thanks/') # Redirect after POST
+            return redirect(app_thanks) # Redirect after POST
     else:
         form = CreateAppForm() # An unbound form
 
