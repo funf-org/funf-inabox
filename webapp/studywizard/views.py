@@ -16,6 +16,11 @@ APP_KEY = os.environ['DROPBOX_APP_KEY']
 APP_SECRET = os.environ['DROPBOX_APP_SECRET']
 ACCESS_TYPE = 'app_folder'
 
+# Redirect stdout to stderr to print to apache error logs
+import sys
+sys.stdout = sys.stderr
+
+
 def db_session(access_token=None, access_token_secret=None):
     sess = session.DropboxSession(APP_KEY, APP_SECRET, ACCESS_TYPE)
     if access_token and access_token_secret:
@@ -25,7 +30,6 @@ def db_session(access_token=None, access_token_secret=None):
 def db_client(request):
     access_token = request.session.get("dropbox_access_token")
     access_token_secret = request.session.get("dropbox_access_token_secret")
-    print str(access_token) + " " + str(access_token_secret)
     return client.DropboxClient(db_session(access_token, access_token_secret)) if (access_token and access_token_secret) else None
     
 
@@ -35,7 +39,6 @@ def dropbox_auth(request):
     request_token = sess.obtain_request_token()
     request.session["dropbox_request_token"] = request_token
     callback_url = request.build_absolute_uri(reverse(post_dropbox_auth))
-    print callback_url
     url = sess.build_authorize_url(request_token, oauth_callback=callback_url)
     return redirect(url)
 
@@ -43,7 +46,6 @@ def post_dropbox_auth(request):
     sess = db_session()
     request_token = request.session.get("dropbox_request_token")
     access_token = sess.obtain_access_token(request_token)
-    print dir(access_token)
     if access_token:
         request.session["dropbox_access_token"] = access_token.key
         request.session["dropbox_access_token_secret"] = access_token.secret
@@ -109,8 +111,6 @@ def app_create(request):
             #Create json config for app creation
             config_dict = create_app_config(app_form_vars, app_probe_vars)
             config_json = json.dumps(config_dict)
-            print app_form_vars
-            print config_json
             
             dropbox_account_info = client.account_info()
             access_token = request.session.get("dropbox_access_token")
@@ -164,7 +164,6 @@ def copy_to_dropbox(db_client, root_path, dropbox_folder_name, abort_count = 0):
     pattern = '*'
 
     try:
-        print root_path
         for root, dirs, files in os.walk(root_path):
             #Strip everything up until our root directory
             short_root = '/' + dropbox_folder_name + '/' + root[root_length+1:]
@@ -176,7 +175,6 @@ def copy_to_dropbox(db_client, root_path, dropbox_folder_name, abort_count = 0):
                 #Copy files to dropbox
                 for filename in fnmatch.filter(files, pattern):
                     if not filename.startswith('.'):
-                        print short_root + filename
                         f = open(os.path.join(root, filename))
                         file_success = copy_file_to_dropbox(db_client, short_root, filename, f)
                         if file_success == False:
@@ -193,7 +191,6 @@ def copy_file_to_dropbox(db_client, short_root, filename, f):
     try:
         response = db_client.put_file(os.path.join(short_root, filename), f, overwrite=True)
     except rest.ErrorResponse as inst:
-        print inst
         time.sleep(30)
         try:
             response = db_client.put_file(os.path.join(short_root, filename), f, overwrite=True)
@@ -209,7 +206,6 @@ def copy_folder_to_dropbox(db_client, short_root):
         response = db_client.file_create_folder(short_root)
     except rest.ErrorResponse as inst:
         if not str(inst).startswith('[403]'): #folder already exists
-            print inst
             time.sleep(30)
             try:
                 response = db_client.file_create_folder(short_root)

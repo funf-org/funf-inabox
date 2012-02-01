@@ -1,7 +1,4 @@
 # Django settings for webapp project.
-# TEMPORARY PATH ALTERATIONS
-import sys
-sys.path.append('../app_generator')
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -30,7 +27,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/New_York'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -103,7 +100,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'webapp.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -147,3 +144,11 @@ LOGGING = {
         },
     }
 }
+
+import imp
+try:
+    imp.find_module('settings_local') # Assumed to be in the same directory.
+except ImportError:
+    pass
+else:
+    from settings_local import *
