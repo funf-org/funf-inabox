@@ -82,11 +82,22 @@ class CreateAppThread(threading.Thread):
         copy_to_dropbox(self.db_client, app_dir, os.path.basename(app_dir))
         shutil.rmtree(temp_dir)
 
+
 def app_create(request):
     #Dropbox auth
     client = db_client(request)
     if not client:
         return redirect(dropbox_auth)
+    #Make sure tokens are valid
+    try:
+        client.account_info()
+    except:
+        try:
+            del request.session["dropbox_access_token"]
+            del request.session["dropbox_access_token_secret"]
+            return redirect(dropbox_auth)
+        except:
+            return redirect('home')
     
     #If form submitted
     if request.method == 'POST':
