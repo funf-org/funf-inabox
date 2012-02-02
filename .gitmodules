@@ -1,3 +1,3 @@
 [submodule "data_scripts/scripts"]
 	path = data_scripts/scripts
-	url = https://alan.gardner@code.google.com/p/funf-open-sensing-framework.scripts/
+	url = https://code.google.com/p/funf-open-sensing-framework.scripts/
