@@ -293,6 +293,15 @@ hr {
   margin-top: 0px;
 }
 
+#topLinkBar {
+  margin-top: -30px;
+  padding-bottom: 20px;
+  float: right;
+}
+#topLinkBar a:link { color: #4b4b4b; }
+#topLinkBar a:visited { color: #4b4b4b; } 
+#topLinkBar a:hover { color: #97c024; } 
+
 #mainCenter {
   width:500px; 
   height: 100%;
@@ -327,6 +336,7 @@ hr {
   font: 12px/16px Roboto, sans-serif;
   font-weight: 400;
   color: #272727;
+  padding-bottom: 1px;
 }
 
 label {

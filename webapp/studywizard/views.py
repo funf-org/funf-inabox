@@ -145,6 +145,9 @@ def app_thanks(request):
     now = datetime.datetime.now()
     return render(request, "thanks.html", {"current_time": now})
 
+def app_info(request):
+    return render(request, "info.html")
+
 
 def create_app_config(app_form_vars, app_probe_vars):
     config_dict = {}

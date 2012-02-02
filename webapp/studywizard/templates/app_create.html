@@ -1,11 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Funf in a Box{% endblock %}
+{% block title %}{% endblock %}
 
 {% block content %}
-<div id="mainCenter">
-    <img id="logo" src="{{ STATIC_URL }}images/funfinabox.png" />
-
     <form action="" method="post">{% csrf_token %}
     	<h3>General</h3>
     	<hr />
@@ -177,5 +174,4 @@
 	</form>
 
 	<!-- <p class="centeredLink"><a href="{% url studywizard.views.app_list %}">Create your App!</a></p> -->
-</div>
 {% endblock %}
