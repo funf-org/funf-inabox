@@ -142,7 +142,7 @@ public class DropboxPipeline extends ConfiguredPipeline{
 		i.setData(Uri.parse("sample://unused_data")); // Used to make sure we don't capture the real scheduled pending intent
 		PendingIntent pi = PendingIntent.getService(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, Utils.secondsToMillis(120), pi);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Utils.secondsToMillis(60), pi);
 	}
 	
 	@Override
