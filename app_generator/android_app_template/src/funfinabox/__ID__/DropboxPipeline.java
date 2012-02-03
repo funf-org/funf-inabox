@@ -5,6 +5,7 @@ import static funfinabox.__ID__.Info.TAG;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import edu.mit.media.funf.IOUtils;
@@ -133,6 +135,14 @@ public class DropboxPipeline extends ConfiguredPipeline{
 		super.onCreate();
 		Log.i(TAG, "Main Pipeline CREATED!");
 		setEncryptionPassword("__PASSWORD__".toCharArray());
+		
+		// One time upload of data 2 minutes after initial load
+		Intent i = new Intent(this, getClass());
+		i.setAction(ACTION_UPLOAD_DATA);
+		i.setData(Uri.parse("sample://unused_data")); // Used to make sure we don't capture the real scheduled pending intent
+		PendingIntent pi = PendingIntent.getService(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC_WAKEUP, Utils.secondsToMillis(120), pi);
 	}
 	
 	@Override
