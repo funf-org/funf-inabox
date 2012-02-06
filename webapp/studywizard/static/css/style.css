@@ -339,6 +339,11 @@ hr {
   padding-bottom: 1px;
 }
 
+.fieldWrapper textarea{
+  margin-top:-16px;
+  margin-left:200px;
+}
+
 label {
     width:200px;    /*Or however much space you need for the form’s labels*/
     float: left;

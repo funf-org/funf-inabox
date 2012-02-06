@@ -1,10 +1,16 @@
 from django import forms
 
 class CreateAppForm(forms.Form):
+    #General
     app_name = forms.CharField(max_length=64)
-    description = forms.CharField(max_length=140)
-    #icon goes here
     contact_email = forms.EmailField()
+    description = forms.CharField(widget=forms.Textarea)
+    #icon goes here
+    #Reg Info (not incorporated in app)
+    creator_name_REG_INFO = forms.CharField(max_length=200, required=False)
+    creator_email_REG_INFO = forms.EmailField(required=False)
+    org_name_REG_INFO = forms.CharField(max_length=200, required=False)
+    location_REG_INFO = forms.CharField(max_length=200,required=False)
     #Device
     AndroidInfoProbe = forms.BooleanField(required=False)
     AndroidInfoProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))

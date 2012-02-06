@@ -3,6 +3,7 @@ from dropbox import client, rest, session
 import os
 from django.shortcuts import redirect, render
 from django.core.urlresolvers import reverse
+from models import Stats
 from forms import CreateAppForm
 import time, datetime
 import json
@@ -105,10 +106,14 @@ def app_create(request):
         if form.is_valid():
             # Process the data in form.cleaned_data
             app_form_vars = {}
+            app_registration_vars = {}
             app_probe_vars = {}
             for field_name in form.cleaned_data.keys():
+                #Registration info
+                if field_name.endswith('REG_INFO'):
+                    app_registration_vars[field_name] = form.cleaned_data[field_name]
                 #General app info
-                if not field_name.endswith('Probe') and not field_name.endswith('freq') and not field_name.endswith('duration'):
+                elif not field_name.endswith('Probe') and not field_name.endswith('freq') and not field_name.endswith('duration'):
                     app_form_vars[field_name] = form.cleaned_data[field_name]
                 #Probe info
                 elif not field_name.endswith('freq') and not field_name.endswith('duration') and not form.cleaned_data[field_name] == False:
@@ -118,7 +123,10 @@ def app_create(request):
                         app_probe_vars[field_name]['DURATION'] = int(form.cleaned_data[field_name + '_duration'])
                     except:
                         pass
-            
+
+            app_creation = Stats(create_time=datetime.datetime.now(), app_name=app_form_vars['app_name'], description=app_form_vars['description'], contact_email=app_form_vars['contact_email'], creator_name=app_registration_vars['creator_name_REG_INFO'], creator_email=app_registration_vars['creator_email_REG_INFO'], org_name=app_registration_vars['org_name_REG_INFO'], location=app_registration_vars['location_REG_INFO'])
+            app_creation.save()
+
             #Create json config for app creation
             config_dict = create_app_config(app_form_vars, app_probe_vars)
             config_json = json.dumps(config_dict)

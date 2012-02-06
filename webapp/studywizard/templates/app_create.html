@@ -4,7 +4,7 @@
 
 {% block content %}
     <form action="" method="post">{% csrf_token %}
-    	<h3>General</h3>
+    	<h3>General (displayed in app)</h3>
     	<hr />
 	    <div class="fieldWrapper">
 	        {{ form.app_name.errors }}
@@ -12,15 +12,40 @@
 	        {{ form.app_name }}
 	    </div>
 	    <div class="fieldWrapper">
-	        {{ form.description.errors }}
-	        <label for="id_description">Description:</label>
-	        {{ form.description }}
-	    </div>
-	    <div class="fieldWrapper">
 	        {{ form.contact_email.errors }}
 	        <label for="id_contact_email">Contact Email:</label>
 	        {{ form.contact_email }}
 	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.description.errors }}
+	        <label for="id_description">Description:</label>
+	        {{ form.description }}
+	    </div>
+    	<h3>General (not displayed in app)</h3>
+    	<hr />
+	    <div class="fieldWrapper">
+	        {{ form.creator_name_REG_INFO.errors }}
+	        <label for="id_creator_name_REG_INFO">Your Name:</label>
+	        {{ form.creator_name_REG_INFO }}
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.creator_email_REG_INFO.errors }}
+	        <label for="id_creator_email_REG_INFO">Your Email:</label>
+	        {{ form.creator_email_REG_INFO }}
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.org_name_REG_INFO.errors }}
+	        <label for="id_org_name_REG_INFO">Organization Name:</label>
+	        {{ form.org_name_REG_INFO }}
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.location_REG_INFO.errors }}
+	        <label for="id_location_REG_INFO">Location:</label>
+	        {{ form.location_REG_INFO }}
+	    </div>
+	    <h3>Configuration</h3>
+	    <hr />
+	    The following are the default data collection and configuration settings. They can be modified at Dropbox/Funf In A Box/[Your App Name]/config/funf_config.csv.
 	    <h3>Device</h3>
 	    <hr />
 	    <div class="fieldWrapper">
