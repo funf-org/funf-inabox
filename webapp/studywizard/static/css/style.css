@@ -302,6 +302,10 @@ hr {
 #topLinkBar a:visited { color: #4b4b4b; } 
 #topLinkBar a:hover { color: #97c024; } 
 
+.link a:link { color: #4b4b4b; }
+.link a:visited { color: #4b4b4b; } 
+.link a:hover { color: #97c024; } 
+
 #mainCenter {
   width:500px; 
   height: 100%;
@@ -321,6 +325,10 @@ hr {
   font-weight: 400;
   color: #272727;
   margin-left: 10px;
+}
+
+.legal{
+  font: 10px/14px Roboto, sans-serif;
 }
 
 .centeredLink{

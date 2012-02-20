@@ -15,6 +15,7 @@ urlpatterns = patterns('',
     url(r'^create/$', views.app_create),
     url(r'^thanks/$', views.app_thanks),
     url(r'^info/$', views.app_info),
+    url(r'^legal/$', views.app_legal),
     # Examples:
     # url(r'^$', 'webapp.views.home', name='home'),
     # url(r'^webapp/', include('webapp.foo.urls')),

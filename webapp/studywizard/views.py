@@ -156,6 +156,9 @@ def app_thanks(request):
 def app_info(request):
     return render(request, "info.html")
 
+def app_legal(request):
+    return render(request, "legal.html")
+
 
 def create_app_config(app_form_vars, app_probe_vars):
     config_dict = {}

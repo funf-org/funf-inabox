@@ -3,22 +3,26 @@
 {% block title %}{% endblock %}
 
 {% block content %}
+<div class="link">
+<h3>Info</h3>
 <hr />
-<h2>Info</h2>
 <p>This is a step by step tutorial to help you create your own Funf in a Box, from creating a Dropbox account all the way to processing your data into files that can be opened in a data viewer such as Excel or Google Spreadsheets.</p>
 
 <h3>Dropbox</h3>
+<hr />
 <p>Funf in a Box is integrated with Dropbox to eliminate the need to host your own server to collect data.  Dropbox is a free file hosting service.  Files you save to your Dropbox will automatically save to all your computers, phones and even the Dropbox website.  If you don’t already have a Dropbox account got to <a href="http://www.dropbox.com/register">www.dropbox.com/register</a> and sign up.</p>
 <p>We recommend you install the Dropbox application on your computer.  This is not required, but it will allow you to process your data without having to download the entire folder all at once.  It could be pretty big once all that data is in there.  Go to <a href="http:/www.dropbox.com/install">www.dropbox.com/install</a> to get it.</p>
 <p>Once you have an account head to <a href="http://www.funf.org/inabox">www.funf.org/inabox</a> and click “Get Started!”  We will redirect you to Dropbox where you may have to sign in.  Dropbox will ask you to confirm that you want Funf in a Box to have access to a folder in you Dropbox.  Click “Allow” to continue.</p>
 
 
 <h3>The Application Form</h3>
+<hr />
 <p>The information from this form will be used to build your very own Funf in a Box Android app.  We need some basic information on who you are, why you are collecting data, and what data you are collecting.  Users who install your app will be able to see the information you provide, so they can contact you if they run into problems.</p>
 <p>Each sensor can be enabled by checking the box to the left of its name.  Optionally you can customize the rate at which the probe will scan.  Don’t worry if you don’t know what to put.  If you those fields blank we will choose reasonable defaults.  Remember as you are choosing that each probe has an impact on the phone’s battery life.  More probes and more frequent scans will use battery faster.  In particular, be wary of too many scans with the LocationProbe and AccelerometerProbe.</p>
 <p>When you are done hit “Create your App!”  You will be taken to a completion screen, and your app will be uploaded to your Dropbox in the next several minutes.</p>
 
 <h3>Your App Directory</h3>
+<hr />
 <p>Locate your app directory by opening your Dropbox (“My Documents\Dropbox” on Windows, “Dropbox” in your home directory on a Mac).  Inside your dropbox will be an “Apps” folder, and inside of that should be the “Funf In A Box” folder.  This is where all of the apps you create will appear.  The folder for your app will be named the same as the name you gave your application.  </p>
 <ul>
 <li><em>data</em> - All of the processed and raw data will be in this directory.
@@ -31,18 +35,21 @@
 
 
 <h3>Deploying the App</h3>
+<hr />
 <p>The Funf in a Box Android application in your app folder is ready to be distributed.  You can either release your app to the Android Market (where many people download it) or control the release manually.  Both processes are discussed on the <a href="http://developer.android.com/guide/publishing/publishing_overview.html#publishing-release">Android website</a>.
 </p>
 <p>By default Android users can only install apps from the the Android Market.  If you manually release they app by email, on a website, or by sharing a <a href="http://www.dropbox.com/help/16">public link</a> from your Dropbox you will have to instruct your users to enable unknown sources on their Android device.  You can find this option in the Android settings under “Application Settings” or “Security.”  </p>
 
 <h3>Processing Data</h3>
+<hr />
 <p>Several hours after your data collecting application has been installed, it will start to send encrypted data files to your Dropbox.  You can find these files in your app directory, inside the “/data/raw” folder.  While you can see the files, the data cannot be viewed directly from these files.  First they must be processed.</p>
 <p>Processing will decrypt these files and merge them into one database file (an <a href="http://www.sqlite.org/">SQLite</a> database file).  Run the “scripts/process_data” script by double clicking it on your platform (Windows and Mac supported, for Linux you can run the <a href="http://code.google.com/p/funf-open-sensing-framework/source/browse?repo=inabox#git%2Fdata_scripts">python script</a> directly ).  Processing can take some time depending on how much data you have collected.  When it is finished you will have a file called “all_data.db” inside your data directory.  Every time you run this script this file will be overwritten, but will always include all of the data available in the raw directory.</p>
 <p>At this point, you can either browse the data directly from this file using an <a href=" http://sourceforge.net/projects/sqlitebrowser/">SQLite browser</a> or you can run the “scripts/convert_to_csv” script to generate CSV files from the database file.  A CSV file will be generated for each probe, and you can open them up in your favorite spreadsheet application (Excel, Open Office, Google Spreadsheets).</p>
 
 
 <h3>Beyond Funf in a Box</h3>
+<hr />
 <p>Funf in a Box just scratches the surface of what Funf can do.  If Funf in a Box does not fulfill your needs you may consider building your own Android application using the <a href="http://code.google.com/p/funf-open-sensing-framework/">Funf library</a>.  Please send any questions, comments or ideas, to funf (at) media.mit.edu.   If you use Funf in a Box as part of a publication, please cite the following <a href="http://research.myipcn.org/science/article/pii/S1574119211001246#FCANote">Pervasive and Mobile Computing Journal paper</a>. The full citation is:</p>
 <p>Nadav Aharony, Wei Pan, Cory Ip, Inas Khayal, Alex Pentland, Social fMRI: Investigating and shaping social mechanisms in the real world, Pervasive and Mobile Computing, 2011, ISSN 1574-1192, 10.1016/j.pmcj.2011.09.004.</p>
-
+</div>
 {% endblock %}

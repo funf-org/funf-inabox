@@ -194,6 +194,12 @@
 	        {{ form.SMSProbe.errors }}
 	        {{ form.SMSProbe }} <label for="SMSProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#SMS">SMS Logs</a> every </label>{{ form.SMSProbe_freq.errors }}{{ form.SMSProbe_freq }} seconds
 	    </div>
+	    <h3>Terms and Conditions</h3>
+	    <hr />
+	    <div class="fieldWrapper">
+			{{ form.ReadTermsAndConditions.errors }}
+			{{ form.ReadTermsAndConditions }} I have read and understand the <a target="_blank" href="{% url studywizard.views.app_legal %}">terms and conditions</a>.
+		</div>
 	    <br />
 		<input type="submit" value="Create your App!" />
 	</form>

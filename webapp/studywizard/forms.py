@@ -102,3 +102,5 @@ class CreateAppForm(forms.Form):
     ContactProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
     SMSProbe = forms.BooleanField(required=False)
     SMSProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
+    #Read terms and conditions
+    ReadTermsAndConditions = forms.BooleanField(required=True)
