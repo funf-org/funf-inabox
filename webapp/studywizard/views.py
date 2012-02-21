@@ -124,12 +124,13 @@ def app_create(request):
                     except:
                         pass
 
-            app_creation = Stats(create_time=datetime.datetime.now(), app_name=app_form_vars['app_name'], description=app_form_vars['description'], contact_email=app_form_vars['contact_email'], creator_name=app_registration_vars['creator_name_REG_INFO'], creator_email=app_registration_vars['creator_email_REG_INFO'], org_name=app_registration_vars['org_name_REG_INFO'], location=app_registration_vars['location_REG_INFO'])
-            app_creation.save()
-
             #Create json config for app creation
             config_dict = create_app_config(app_form_vars, app_probe_vars)
             config_json = json.dumps(config_dict)
+
+            #Save stats
+            app_creation = Stats(create_time=datetime.datetime.now(), app_name=app_form_vars['app_name'], description=app_form_vars['description'], contact_email=app_form_vars['contact_email'], creator_name=app_registration_vars['creator_name_REG_INFO'], creator_email=app_registration_vars['creator_email_REG_INFO'], org_name=app_registration_vars['org_name_REG_INFO'], location=app_registration_vars['location_REG_INFO'], probe_config=str(config_dict))
+            app_creation.save()
             
             dropbox_account_info = client.account_info()
             access_token = request.session.get("dropbox_access_token")

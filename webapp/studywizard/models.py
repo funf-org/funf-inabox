@@ -13,3 +13,4 @@ class Stats(models.Model):
 	creator_email = models.EmailField()
 	org_name = models.CharField(max_length=200)
 	location = models.CharField(max_length=200)
+	probe_config = models.TextField()
