@@ -368,3 +368,7 @@ input[type="checkbox"] {
 .fieldWrapper a:link { color: #272727; }
 .fieldWrapper a:visited { color: #272727; } 
 .fieldWrapper a:hover { color: #97c024; } 
+
+.errorlist{
+    color: red;
+}
