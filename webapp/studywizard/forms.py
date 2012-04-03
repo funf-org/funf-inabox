@@ -14,7 +14,7 @@ class CreateAppForm(forms.Form):
     #Device
     dataUploadStrategy = forms.ChoiceField(required=True, choices=(('ANY', 'Over Wi-Fi or mobile network'),
                                                                    ('WIFI', 'Over Wi-Fi only'),
-                                                                   ('NONE', 'No Automatic Upload'),
+                                                                   ('NONE', 'No automatic upload'),
                                                                    ))
     AndroidInfoProbe = forms.BooleanField(required=False)
     AndroidInfoProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
