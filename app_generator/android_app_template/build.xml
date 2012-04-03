@@ -45,21 +45,19 @@
             unless="sdk.dir"
     />
 
-
-<!-- extension targets. Uncomment the ones where you want to do custom work
-     in between standard targets -->
-<!--
-    <target name="-pre-build">
-    </target>
-    <target name="-pre-compile">
-    </target>
-
-    /* This is typically used for code obfuscation.
-       Compiled code location: ${out.classes.absolute.dir}
-       If this is not done in place, override ${out.dex.input.absolute.dir} */
-    <target name="-post-compile">
-    </target>
--->
+    <!--
+        Import per project custom build rules if present at the root of the project.
+        This is the place to put custom intermediary targets such as:
+            -pre-build
+            -pre-compile
+            -post-compile (This is typically used for code obfuscation.
+                           Compiled code location: ${out.classes.absolute.dir}
+                           If this is not done in place, override ${out.dex.input.absolute.dir})
+            -post-package
+            -post-build
+            -pre-clean
+    -->
+    <import file="custom_rules.xml" optional="true" />
 
     <!-- Import the actual build file.
 
@@ -82,33 +80,4 @@
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
 
-	
-	<loadproperties srcFile="inabox.properties" />
-	<target name="customize">
-	    	
-	    	<!-- Rename package dir -->
-	    	<move todir="${basedir}/src/funfinabox/${inabox.app.id}" includeEmptyDirs="yes" verbose="true">
-		        <fileset dir="${basedir}/src/funfinabox/__ID__"  />
-		    </move>
-	    	
-	    	<!-- Replace tokens in files -->
-	    	<replace dir="${basedir}">
-	    		<include name="**/*.java"/>
-	    		<include name="**/*.xml"/>
-	    		<exclude name="build.xml"/>
-	    	  	<replacefilter token="__NAME__" value="${inabox.app.name}"/>
-	    		<replacefilter token="__ID__" value="${inabox.app.id}"/>
-	    		<replacefilter token="__SERVICES__" value="${inabox.app.services}"/>
-	    		<replacefilter token="__PERMISSIONS__" value="${inabox.app.permissions}"/>
-	    		<replacefilter token="__PROBES__" value="${inabox.app.probes}"/>
-	    		<replacefilter token="__DESCRIPTION__" value="${inabox.app.description}"/>
-	    		<replacefilter token="__EMAIL__" value="${inabox.app.email}"/>
-	    		<replacefilter token="__CONFIG__" value="${inabox.app.config}"/>
-	    		<replacefilter token="__PASSWORD__" value="${inabox.app.password}"/>
-	    		<replacefilter token="__DROPBOX_APP_KEY__" value="${inabox.dropbox.appkey}"/>
-	    		<replacefilter token="__DROPBOX_APP_SECRET__" value="${inabox.dropbox.appsecret}"/>	
-	    		<replacefilter token="__DROPBOX_TOKEN__" value="${inabox.dropbox.token}"/>
-	    		<replacefilter token="__DROPBOX_TOKEN_SECRET__" value="${inabox.dropbox.tokensecret}"/>	
-	    	</replace>
-	    </target>
 </project>
