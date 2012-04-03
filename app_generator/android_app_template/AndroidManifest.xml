@@ -43,7 +43,7 @@
     
     <!-- Backing up to the web -->
     <uses-permission android:name="android.permission.INTERNET" />
-    
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     
     __PERMISSIONS__
 </manifest> 

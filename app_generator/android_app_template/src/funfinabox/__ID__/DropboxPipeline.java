@@ -5,7 +5,6 @@ import static funfinabox.__ID__.Info.TAG;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
@@ -170,8 +169,10 @@ public class DropboxPipeline extends ConfiguredPipeline{
 		super.updateConfig(config);
 	}
 
+	
+	
 	@Override
-	public void uploadData() {
+	public void uploadData(boolean force) {
 		Log.i(TAG, "Dropbox pipeline launching Upload");
 		archiveData();
 		String archiveName = getPipelineName();
@@ -179,6 +180,7 @@ public class DropboxPipeline extends ConfiguredPipeline{
 		Intent i = new Intent(this, getUploadServiceClass());
 		i.putExtra(UploadService.ARCHIVE_ID, archiveName);
 		i.putExtra(UploadService.REMOTE_ARCHIVE_ID, uploadUrl);
+		i.putExtra(UploadService.NETWORK, (!force && getConfig().getDataUploadOnWifiOnly()) ? UploadService.NETWORK_WIFI_ONLY : UploadService.NETWORK_ANY);
 		startService(i);
 		getSystemPrefs().edit().putLong(LAST_DATA_UPLOAD, System.currentTimeMillis()).commit();
 	}

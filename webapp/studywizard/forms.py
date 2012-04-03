@@ -12,6 +12,10 @@ class CreateAppForm(forms.Form):
     org_name_REG_INFO = forms.CharField(max_length=200, required=False)
     location_REG_INFO = forms.CharField(max_length=200,required=False)
     #Device
+    dataUploadStrategy = forms.ChoiceField(required=True, choices=(('ANY', 'Over Wi-Fi or mobile network'),
+                                                                   ('WIFI', 'Over Wi-Fi only'),
+                                                                   ('NONE', 'No Automatic Upload'),
+                                                                   ))
     AndroidInfoProbe = forms.BooleanField(required=False)
     AndroidInfoProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
     BatteryProbe = forms.BooleanField(required=False)

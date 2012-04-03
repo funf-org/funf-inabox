@@ -46,6 +46,14 @@
 	    <h3>Configuration</h3>
 	    <hr />
 	    The following are the default data collection and configuration settings. They can be modified at Dropbox/Funf In A Box/[Your App Name]/config/funf_config.json.
+	    <h3>Automatic Upload</h3>
+	    <hr />
+	    <div class="fieldWrapper">
+	        {{ form.dataUploadStrategy.errors }}
+	        {{ form.dataUploadStrategy }} 
+	        <p>Note: You can always manually upload using the "Sync Now" menu option in the app.
+	        </p>
+	    </div>
 	    <h3>Device</h3>
 	    <hr />
 	    <div class="fieldWrapper">
