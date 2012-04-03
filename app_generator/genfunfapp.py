@@ -201,13 +201,13 @@ def generate(dir_path, user_id, dropbox_token, dropbox_token_secret, name, descr
                          'inabox.dropbox.token': dropbox_token,
                          'inabox.dropbox.tokensecret': dropbox_token_secret,
                          }
-    print inabox_properties
+    #print inabox_properties
     
     with open(os.path.join(android_app_dir, 'inabox.properties'), 'w') as file:
         file.writelines(["%s = %s\n" % (key, value) for key, value in inabox_properties.iteritems()])
-            
+    
     try:
-        check_call(['ant', '-f',  os.path.join(android_app_dir, 'build.xml'),'clean', 'customize', 'release'])
+        check_call(['ant','clean', 'customize', 'release'], cwd=android_app_dir)
     except CalledProcessError as e:
         return None
     

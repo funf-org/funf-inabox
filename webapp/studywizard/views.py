@@ -166,7 +166,7 @@ def create_app_config(app_form_vars, app_probe_vars):
     config_dict['name'] = app_form_vars['app_name']
     config_dict['version'] = 1
     config_dict['dataUploadOnWifiOnly'] = True if app_form_vars['dataUploadStrategy'] == 'WIFI'else False
-    config_dict['dataUploadPeriod'] = 0 if app_form_vars['dataUploadStrategy'] == 'NONE' else 60 # TODO: TESTING
+    config_dict['dataUploadPeriod'] = 0 if app_form_vars['dataUploadStrategy'] == 'NONE' else 10800
     
     config_dict['dataRequests'] = {}
 
