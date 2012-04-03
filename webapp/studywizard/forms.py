@@ -24,8 +24,8 @@ class CreateAppForm(forms.Form):
     HardwareInfoProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
     TelephonyProbe = forms.BooleanField(required=False)
     TelephonyProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
-    TimeOffsetProbe = forms.BooleanField(required=False)
-    TimeOffsetProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
+    #TimeOffsetProbe = forms.BooleanField(required=False)
+    #TimeOffsetProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
     #Device Interaction
     AudioFilesProbe = forms.BooleanField(required=False)
     AudioFilesProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))

@@ -72,10 +72,12 @@
 	        {{ form.TelephonyProbe.errors }}
 	        {{ form.TelephonyProbe }} <label for="TelephonyProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Telephony">Mobile Network Info</a> every </label>{{ form.TelephonyProbe_freq.errors }}{{ form.TelephonyProbe_freq }} seconds
 	    </div>
+	    {% comment %}
 	    <div class="fieldWrapper">
 	        {{ form.TimeOffsetProbe.errors }}
 	        {{ form.TimeOffsetProbe }} <label for="TimeOffsetProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Time_Offset">Time Offset</a> every </label>{{ form.TimeOffsetProbe_freq.errors }}{{ form.TimeOffsetProbe_freq }} seconds
 	    </div>
+	    {% endcomment %}
 	    <h3>Device Interaction</h3>
 	    <hr />
 	    <div class="fieldWrapper">
