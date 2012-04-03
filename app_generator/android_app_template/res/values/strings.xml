@@ -12,4 +12,6 @@
     <string name="uninstall">Uninstall this App</string>
     <string name="made_by">made by</string>
     <string name="funf_in_a_box">Funf In A Box</string>
+    <string name="sync">Sync Now</string>
+    <string name="syncing_message">Syncing...</string>
 </resources>

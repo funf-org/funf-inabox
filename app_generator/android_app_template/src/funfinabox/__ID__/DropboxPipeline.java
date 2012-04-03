@@ -51,7 +51,10 @@ public class DropboxPipeline extends ConfiguredPipeline{
 		FunfConfig config = getConfig();
 		scheduleAlarm(ACTION_UPDATE_CONFIG, config.getConfigUpdatePeriod());
 		scheduleAlarm(ACTION_ARCHIVE_DATA, config.getDataArchivePeriod());
-		scheduleAlarm(ACTION_UPLOAD_DATA, config.getDataUploadPeriod());
+		long uploadPeriod = config.getDataUploadPeriod();
+		if (uploadPeriod > 0) {
+			scheduleAlarm(ACTION_UPLOAD_DATA, config.getDataUploadPeriod());
+		}
 	}
 	
 	private void scheduleAlarm(String action, long delayInSeconds) {
@@ -135,13 +138,15 @@ public class DropboxPipeline extends ConfiguredPipeline{
 		Log.i(TAG, "Main Pipeline CREATED!");
 		setEncryptionPassword("__PASSWORD__".toCharArray());
 		
-		// One time upload of data 2 minutes after initial load
-		Intent i = new Intent(this, getClass());
-		i.setAction(ACTION_UPLOAD_DATA);
-		i.setData(Uri.parse("sample://unused_data")); // Used to make sure we don't capture the real scheduled pending intent
-		PendingIntent pi = PendingIntent.getService(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
-		AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Utils.secondsToMillis(60), pi);
+		// One time upload of data 1 minute after initial load
+		if (getConfig().getDataUploadPeriod() > 0) {
+			Intent i = new Intent(this, getClass());
+			i.setAction(ACTION_UPLOAD_DATA);
+			i.setData(Uri.parse("sample://unused_data")); // Used to make sure we don't capture the real scheduled pending intent
+			PendingIntent pi = PendingIntent.getService(this, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+			AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+			alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + Utils.secondsToMillis(60), pi);
+		}
 	}
 	
 	@Override
