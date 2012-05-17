@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#
+# 
 # Funf: Open Sensing Framework
 # Copyright (C) 2010-2011 Nadav Aharony, Wei Pan, Alex Pentland.
 # Acknowledgments: Alan Gardner

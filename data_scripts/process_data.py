@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#
+# 
 # Funf: Open Sensing Framework
 # Copyright (C) 2010-2011 Nadav Aharony, Wei Pan, Alex Pentland.
 # Acknowledgments: Alan Gardner
@@ -20,7 +20,6 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with Funf. If not, see <http://www.gnu.org/licenses/>.
 # 
-
 import os.path
 import inspect
 import sys
