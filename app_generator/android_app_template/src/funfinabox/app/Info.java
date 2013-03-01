@@ -21,7 +21,7 @@
  * License along with Funf. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package funfinabox.__ID__;
+package funfinabox.app;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +62,7 @@ import edu.mit.media.funf.pipeline.BasicPipeline;
 import edu.mit.media.funf.pipeline.Pipeline;
 import edu.mit.media.funf.probe.Probe.DisplayName;
 import edu.mit.media.funf.util.StringUtil;
+import funfinabox.__ID__.R;
 
 
 public class Info extends Activity

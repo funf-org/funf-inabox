@@ -183,22 +183,32 @@ def app_legal(request):
 
 
 def create_app_config(app_form_vars, app_probe_vars):
-    config_dict = {}
-    config_dict['name'] = app_form_vars['app_name']
-    config_dict['version'] = 1
-    config_dict['dataUploadOnWifiOnly'] = True if app_form_vars['dataUploadStrategy'] == 'WIFI'else False
-    config_dict['dataUploadPeriod'] = 0 if app_form_vars['dataUploadStrategy'] == 'NONE' else 10800
+    config_dict = {
+        'name': app_form_vars['app_name'],
+        'version': 1,
+        'upload': None if app_form_vars['dataUploadStrategy'] == 'NONE' else {
+            '@type': 'funfinabox.app.DropboxArchive',
+            '@schedule': {'interval': 10800},  
+            'wifiOnly': True if app_form_vars['dataUploadStrategy'] == 'WIFI' else False
+        },
+        'update': {
+            '@type': 'funfinabox.app.DropboxConfigUpdater',
+            '@schedule': {'interval': 10800}
+        },
+        'data': []
+    }
     
-    config_dict['dataRequests'] = {}
-
     for key in app_probe_vars.keys():
-        period_duration = {}
+        schedule = {}
         try:
-            period_duration['PERIOD'] = app_probe_vars[key]['PERIOD']
-            period_duration['DURATION'] = app_probe_vars[key]['DURATION']
+            schedule['interval'] = app_probe_vars[key]['PERIOD']
+            schedule['duration'] = app_probe_vars[key]['DURATION']
         except:
             pass
-        config_dict['dataRequests']['edu.mit.media.funf.probe.builtin.' + key] = [period_duration]
+        config_dict['data'].append({
+            '@type': 'edu.mit.media.funf.probe.builtin.' + key,
+            '@schedule': schedule
+        })
 
     return config_dict
 

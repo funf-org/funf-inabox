@@ -21,9 +21,9 @@
  * License along with Funf. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package funfinabox.__ID__;
+package funfinabox.app;
 
-import static funfinabox.__ID__.Info.TAG;
+import static funfinabox.app.Info.TAG;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,6 +41,8 @@ import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
+
+import funfinabox.__ID__.R;
 
 public class DropboxUtil {
 

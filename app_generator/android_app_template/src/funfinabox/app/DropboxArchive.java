@@ -21,7 +21,7 @@
  * License along with Funf. If not, see <http://www.gnu.org/licenses/>.
  * 
  */
-package funfinabox.__ID__;
+package funfinabox.app;
 
 import java.io.File;
 

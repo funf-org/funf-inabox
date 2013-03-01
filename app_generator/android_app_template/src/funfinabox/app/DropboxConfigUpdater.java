@@ -1,4 +1,4 @@
-package funfinabox.__ID__;
+package funfinabox.app;
 
 import android.content.Context;
 
