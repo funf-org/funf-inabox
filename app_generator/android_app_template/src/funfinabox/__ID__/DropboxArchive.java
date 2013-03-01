@@ -26,12 +26,18 @@ package funfinabox.__ID__;
 import java.io.File;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.NetworkInfo.State;
+import edu.mit.media.funf.config.Configurable;
+import edu.mit.media.funf.storage.RemoteFileArchive;
 
-import edu.mit.media.funf.storage.RemoteArchive;
-
-public class DropboxArchive implements RemoteArchive {
+public class DropboxArchive implements RemoteFileArchive {
 	
 	public static final String DROPBOX_ID = "dropbox://funfinabox/__ID__";
+	
+    @Configurable
+    private boolean wifiOnly = false;
 	
 	private Context context;
 	
@@ -48,5 +54,22 @@ public class DropboxArchive implements RemoteArchive {
 	public String getId() {
 		return DROPBOX_ID;
 	}
+
+    @Override
+    public boolean isAvailable() {
+      assert context != null;
+      ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+      NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+      if (!wifiOnly && netInfo != null && netInfo.isConnectedOrConnecting()) {
+        return true;
+      } else if (wifiOnly) {
+        State wifiInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+        if (State.CONNECTED.equals(wifiInfo) || State.CONNECTING.equals(wifiInfo)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    
 
 }

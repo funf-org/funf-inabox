@@ -66,14 +66,10 @@ public class DropboxUtil {
 		return "/" + context.getString(R.string.app_name);
 	}
 	
-	public static String getConfig(Context context) {
+	public static String getConfig(Context context) throws DropboxException {
 		String configFilePath = getAppFolder(context) + "/config/funf_config.json";
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		try {
-			getDropboxApi().getFile(configFilePath, null, os, null);
-		} catch (DropboxException e) {
-			return null;
-		}
+		getDropboxApi().getFile(configFilePath, null, os, null);
 		try {
 			return os.toString("UTF8");
 		} catch (UnsupportedEncodingException e) {

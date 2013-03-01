@@ -23,11 +23,22 @@
  */
 package funfinabox.__ID__;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,10 +50,126 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+
+import edu.mit.media.funf.FunfManager;
+import edu.mit.media.funf.Launcher;
+import edu.mit.media.funf.config.RuntimeTypeAdapterFactory;
+import edu.mit.media.funf.pipeline.BasicPipeline;
+import edu.mit.media.funf.pipeline.Pipeline;
+import edu.mit.media.funf.probe.Probe.DisplayName;
+import edu.mit.media.funf.util.StringUtil;
+
 
 public class Info extends Activity
 {
 	public static final String TAG = "__ID__";
+	public static final String PIPELINE_NAME = "default";
+	
+	private Handler mainHandler;
+	private FunfManager funfMgr = null;
+	private Pipeline pipeline = null;
+	private ServiceConnection funfMgrConn = new ServiceConnection() {
+      
+      @Override
+      public void onServiceConnected(ComponentName name, IBinder service) {
+        funfMgr = ((FunfManager.LocalBinder)service).getManager();
+        pipeline = funfMgr.getRegisteredPipeline(TAG);
+        if (pipeline == null) {
+          new AlertDialog.Builder(Info.this)
+          .setTitle("Collect data?")
+          .setIcon(android.R.drawable.ic_dialog_info)
+          .setCancelable(false)
+          .setMessage("This app will collect data from your phone.  Do you want to coninue?")
+          .setPositiveButton("Yes", new Dialog.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              dialog.dismiss();
+              boolean success = false;
+              try {
+                JsonObject configObject = new JsonParser().parse("__CONFIG__").getAsJsonObject();
+                success = funfMgr.saveAndReload(PIPELINE_NAME, configObject);
+              } catch (JsonSyntaxException e) {
+                success = false;
+              }
+              if(success) {
+                pipeline = funfMgr.getRegisteredPipeline(PIPELINE_NAME);
+                mainHandler.postDelayed(new Runnable() {
+                  @Override
+                  public void run() {
+                    pipeline.onRun(BasicPipeline.ACTION_ARCHIVE, null);
+                    pipeline.onRun(BasicPipeline.ACTION_UPLOAD, null);
+                  }
+                }, 10L * 1000L);
+                reloadProbeList();
+              } else {
+                String email = getResources().getString(R.string.contact_email);
+                new AlertDialog.Builder(Info.this)
+                .setTitle("Bad Config!")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setCancelable(true)
+                .setOnCancelListener(new OnCancelListener() {
+                  @Override
+                  public void onCancel(DialogInterface dialog) {
+                    finish();
+                  }
+                })
+                .setMessage("This app has a bad configuration.  Contact " + email )
+                .create().show();
+              }
+            }
+          })
+          .setNegativeButton("No", new Dialog.OnClickListener() {
+            
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+              dialog.dismiss();
+              finish();
+            }
+          })
+          .create().show();
+        } else {
+          reloadProbeList();
+        }
+      }
+	  
+      @Override
+      public void onServiceDisconnected(ComponentName name) {
+        funfMgr = null;
+      }
+    };
+    
+    private void reloadProbeList() {
+      // Load probe list view from config
+      if (pipeline != null && pipeline instanceof BasicPipeline) {
+        List<String> names = new ArrayList<String>();
+        for (JsonElement el : ((BasicPipeline)pipeline).getDataRequests()) {
+          String probeClassName = el.isJsonPrimitive() ? el.getAsString() : el.getAsJsonObject().get(RuntimeTypeAdapterFactory.TYPE).getAsString();
+          DisplayName probeDisplayName = null;
+          try {
+            probeDisplayName = Class.forName(probeClassName).getAnnotation(DisplayName.class);
+          } catch (ClassNotFoundException e) {
+            
+          }
+          String name = "Unknown";
+          if (probeDisplayName == null) {
+            String[] parts = probeClassName.split(".");
+            name = parts[parts.length - 1].replace("Probe", "");
+          } else {
+            name = probeDisplayName.value();
+          }
+          names.add(name);
+        }
+        ((TextView)findViewById(R.id.probe_list)).setText(StringUtil.join(names, ", "));
+      } else {
+        ((TextView)findViewById(R.id.probe_list)).setText("Unknown...");
+      }
+      
+    }
 	
     /** Called when the activity is first created. */
     @Override
@@ -50,8 +177,10 @@ public class Info extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        if (!LauncherReceiver.isLaunched()) {
-        	LauncherReceiver.launch(this);
+        this.mainHandler = new Handler();
+        
+        if (!Launcher.isLaunched()) {
+        	Launcher.launch(this);
         }
         
         ((TextView)findViewById(R.id.contact_email)).setMovementMethod(LinkMovementMethod.getInstance());
@@ -76,8 +205,16 @@ public class Info extends Activity
 				startActivity(i);  
 			}
 		});
+        
+        bindService(new Intent(this, FunfManager.class), funfMgrConn, BIND_AUTO_CREATE);
     }
     
+    @Override
+    protected void onDestroy() {
+      super.onDestroy();
+      unbindService(funfMgrConn);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -98,15 +235,13 @@ public class Info extends Activity
     
     private void syncNow() {
     	Context context = getApplicationContext();
-    	Toast.makeText(context, R.string.syncing_message, Toast.LENGTH_SHORT).show();
-    	
-    	Intent updateConfigIntent = new Intent(context, DropboxPipeline.class);
-    	updateConfigIntent.setAction(DropboxPipeline.ACTION_UPDATE_CONFIG);
-    	startService(updateConfigIntent);
-    	
-    	Intent uploadDataIntent = new Intent(context, DropboxPipeline.class);
-    	uploadDataIntent.setAction(DropboxPipeline.ACTION_UPLOAD_DATA);
-    	uploadDataIntent.putExtra(DropboxPipeline.EXTRA_FORCE_UPLOAD, true);
-    	startService(uploadDataIntent);
+    	if (funfMgr == null) {
+          Toast.makeText(context, R.string.unable_to_sync, Toast.LENGTH_SHORT).show();
+    	} else {
+    	  Toast.makeText(context, R.string.syncing_message, Toast.LENGTH_SHORT).show();
+          pipeline.onRun(BasicPipeline.ACTION_UPDATE, null);
+          pipeline.onRun(BasicPipeline.ACTION_ARCHIVE, null);
+          pipeline.onRun(BasicPipeline.ACTION_UPLOAD, null);
+    	}
     }
 }

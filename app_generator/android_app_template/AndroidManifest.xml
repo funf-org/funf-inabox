@@ -24,39 +24,12 @@
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="funfinabox.__ID__"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <uses-sdk android:minSdkVersion="7" />
-    <application android:label="@string/app_name" android:icon="@drawable/icon">
-        <activity android:name=".Info"
-                  android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        
-        <!-- Framework services -->
-        <service android:name=".DropboxPipeline"></service>
-        <service android:name=".DropboxUploadService"></service>
-        <service android:name="edu.mit.media.funf.storage.NameValueDatabaseService"></service>
-        
-        <receiver android:name=".LauncherReceiver" android:enabled="true" >
-        	<intent-filter>
-        		<action android:name="android.intent.action.BATTERY_CHANGED" />
-        		<action android:name="android.intent.action.BOOT_COMPLETED" />
-        		<action android:name="android.intent.action.DOCK_EVENT" />
-        		<action android:name="android.intent.action.ACTION_SCREEN_ON" />
-        		<action android:name="android.intent.action.USER_PRESENT" />
-        	</intent-filter>
-        </receiver>
-        
-        __SERVICES__
-    </application>
+      android:versionCode="2"
+      android:versionName="2.0">
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="17" />
     
     <!-- Battery Probe and launching -->
     <uses-permission android:name="android.permission.BATTERY_STATS" />
-    
 
     <!-- All probes -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -69,4 +42,29 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     
     __PERMISSIONS__
+    
+    <application android:label="@string/app_name" android:icon="@drawable/icon">
+        <activity android:name="funfinabox.app.Info"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <!-- Framework services -->
+        <service android:name="edu.mit.media.funf.FunfManager">
+        </service>
+        
+        <receiver android:name="edu.mit.media.funf.Launcher" android:enabled="true" >
+        	<intent-filter>
+        		<action android:name="android.intent.action.BATTERY_CHANGED" />
+        		<action android:name="android.intent.action.BOOT_COMPLETED" />
+        		<action android:name="android.intent.action.DOCK_EVENT" />
+        		<action android:name="android.intent.action.ACTION_SCREEN_ON" />
+        		<action android:name="android.intent.action.USER_PRESENT" />
+        	</intent-filter>
+        </receiver>
+    </application>
+    
 </manifest> 
