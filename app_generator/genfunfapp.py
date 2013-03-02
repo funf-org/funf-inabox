@@ -75,44 +75,6 @@ _all_permisssions = '''
     <!-- DatabaseService, Archive service (unique ids) -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 '''
-_all_services = '''        <!-- Probe Services -->
-        <service android:name="edu.mit.media.funf.probe.builtin.ActivityProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.AndroidInfoProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.ApplicationsProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.AudioFilesProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.BatteryProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.BluetoothProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.BrowserBookmarksProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.BrowserSearchesProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.CallLogProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.CellProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.ContactProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.HardwareInfoProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.ImagesProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.LocationProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.RunningApplicationsProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.ScreenProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.SMSProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.TelephonyProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.TimeOffsetProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.VideosProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.WifiProbe" ></service>
-        
-        <service android:name="edu.mit.media.funf.probe.builtin.AccelerometerSensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.GravitySensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.GyroscopeSensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.LightSensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.LinearAccelerationSensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.MagneticFieldSensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.OrientationSensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.PressureSensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.ProximitySensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.RotationVectorSensorProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.TemperatureSensorProbe" ></service>
-        
-        <service android:name="edu.mit.media.funf.probe.builtin.AudioFeaturesProbe" ></service>
-        <service android:name="edu.mit.media.funf.probe.builtin.AccelerometerFeaturesProbe" ></service>
-'''
 
 def gen_signing_key(directory, password=keystorepass, name=_unknown, organization=_unknown, organizational_unit=_unknown, city=_unknown, state_or_region=_unknown, country=_unknown):
     if not os.path.exists(directory):
@@ -179,11 +141,7 @@ def generate(dir_path, user_id, dropbox_token, dropbox_token_secret, name, descr
     
     ## Create inabox.properties
     funf_config_obj = json.loads(funf_conf)
-    services = _all_services.replace('\n', '') # TODO: calculate only necessary services (including dependent services)
     permissions = _all_permisssions.replace('\n', '') # TODO: calculate only necessary permissions
-    # TODO: should generate probe list at runtime
-    probes = ', '.join([probe.replace('edu.mit.media.funf.probe.builtin.', '').replace('Probe', '') 
-                        for probe in funf_config_obj["dataRequests"].keys()])
     
     # Quotes escaped for java properties file, so that resources compile
     inabox_properties = {'inabox.app.name': dir_filename.replace("'", r"\\'").replace('"', r'\\"'),
@@ -191,9 +149,7 @@ def generate(dir_path, user_id, dropbox_token, dropbox_token_secret, name, descr
                          'inabox.app.description': description.replace("'", r"\\'").replace('"', r'\\"'),
                          'inabox.app.email': contact_email,
                          'inabox.app.config': funf_conf.replace('\n', '').replace("'", r"\\'").replace('"', r'\\"'),
-                         'inabox.app.services': services,
                          'inabox.app.permissions': permissions,
-                         'inabox.app.probes': probes,
                          'inabox.app.password': encryption_password,
                          'inabox.dropbox.appkey': DROPBOX_APP_KEY,
                          'inabox.dropbox.appsecret': DROPBOX_APP_SECRET,

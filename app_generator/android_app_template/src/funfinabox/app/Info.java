@@ -68,7 +68,7 @@ import funfinabox.__ID__.R;
 public class Info extends Activity
 {
 	public static final String TAG = "__ID__";
-	public static final String PIPELINE_NAME = "default";
+	public static final String PIPELINE_NAME = "__NAME__";
 	
 	private Handler mainHandler;
 	private FunfManager funfMgr = null;
