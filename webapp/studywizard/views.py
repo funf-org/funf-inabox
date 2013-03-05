@@ -199,16 +199,17 @@ def create_app_config(app_form_vars, app_probe_vars):
     }
     
     for key in app_probe_vars.keys():
+        probe_config = {'@type': 'edu.mit.media.funf.probe.builtin.' + key}
         schedule = {}
         try:
             schedule['interval'] = app_probe_vars[key]['PERIOD']
             schedule['duration'] = app_probe_vars[key]['DURATION']
         except:
             pass
-        config_dict['data'].append({
-            '@type': 'edu.mit.media.funf.probe.builtin.' + key,
-            '@schedule': schedule
-        })
+        else:
+            if schedule:
+                probe_config['@schedule'] = schedule
+        config_dict['data'].append(probe_config)
 
     return config_dict
 

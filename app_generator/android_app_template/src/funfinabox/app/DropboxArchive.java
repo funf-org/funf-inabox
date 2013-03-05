@@ -41,6 +41,10 @@ public class DropboxArchive implements RemoteFileArchive {
 	
 	private Context context;
 	
+	public DropboxArchive() {
+	  
+	}
+	
 	public DropboxArchive(Context context) {
 		this.context = context;
 	}

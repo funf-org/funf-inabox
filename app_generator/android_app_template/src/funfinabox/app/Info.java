@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -61,6 +62,7 @@ import edu.mit.media.funf.config.RuntimeTypeAdapterFactory;
 import edu.mit.media.funf.pipeline.BasicPipeline;
 import edu.mit.media.funf.pipeline.Pipeline;
 import edu.mit.media.funf.probe.Probe.DisplayName;
+import edu.mit.media.funf.util.LogUtil;
 import edu.mit.media.funf.util.StringUtil;
 import funfinabox.__ID__.R;
 
@@ -78,7 +80,7 @@ public class Info extends Activity
       @Override
       public void onServiceConnected(ComponentName name, IBinder service) {
         funfMgr = ((FunfManager.LocalBinder)service).getManager();
-        pipeline = funfMgr.getRegisteredPipeline(TAG);
+        pipeline = funfMgr.getRegisteredPipeline(PIPELINE_NAME);
         if (pipeline == null) {
           new AlertDialog.Builder(Info.this)
           .setTitle("Collect data?")
@@ -158,8 +160,12 @@ public class Info extends Activity
           }
           String name = "Unknown";
           if (probeDisplayName == null) {
-            String[] parts = probeClassName.split(".");
-            name = parts[parts.length - 1].replace("Probe", "");
+            String[] parts = probeClassName.split("\\.");
+            if (parts.length == 0) {
+              Log.d(LogUtil.TAG, "Bad probe type: '" + probeClassName + "'");
+            } else {
+              name = parts[parts.length - 1].replace("Probe", "");
+            }
           } else {
             name = probeDisplayName.value();
           }
