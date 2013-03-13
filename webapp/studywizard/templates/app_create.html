@@ -61,6 +61,18 @@
 	        {{ form.AndroidInfoProbe }} <label for="AndroidInfoProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Android_Info">Android Info</a> every </label>{{ form.AndroidInfoProbe_freq.errors }}{{ form.AndroidInfoProbe_freq }} seconds
 	    </div>
 	    <div class="fieldWrapper">
+	        {{ form.AccountsProbe.errors }}
+	        {{ form.AccountsProbe }} <label for="AccountsProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Accounts">Accounts</a> every </label>{{ form.AccountsProbe_freq.errors }}{{ form.AccountsProbe_freq }} seconds
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.ProcessStatisticsProbe.errors }}
+	        {{ form.ProcessStatisticsProbe }} <label for="ProcessStatisticsProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Process_Statistics">Process Statistics</a> every </label>{{ form.ProcessStatisticsProbe_freq.errors }}{{ form.ProcessStatisticsProbe_freq }} seconds
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.ServicesProbe.errors }}
+	        {{ form.ServicesProbe }} <label for="ServicesProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Services">Activity Services</a> every </label>{{ form.ServicesProbe_freq.errors }}{{ form.ServicesProbe_freq }} seconds
+	    </div>
+	    <div class="fieldWrapper">
 	        {{ form.BatteryProbe.errors }}
 	        {{ form.BatteryProbe }} <label for="BatteryProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Battery">Battery Info</a> every </label>{{ form.BatteryProbe_freq.errors }}{{ form.BatteryProbe_freq }} seconds
 	    </div>
@@ -81,8 +93,8 @@
 	    <h3>Device Interaction</h3>
 	    <hr />
 	    <div class="fieldWrapper">
-			{{ form.AudioFilesProbe.errors }}
-			{{ form.AudioFilesProbe }} <label for="AudioFilesProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Audio_Files">Audio Files</a> every </label>{{ form.AudioFilesProbe_freq.errors }}{{ form.AudioFilesProbe_freq }} seconds
+			{{ form.AudioMediaProbe.errors }}
+			{{ form.AudioMediaProbe }} <label for="AudioMediaProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Audio_Files">Audio Media</a> every </label>{{ form.AudioMediaProbe_freq.errors }}{{ form.AudioMediaProbe_freq }} seconds
 		</div>
 		<div class="fieldWrapper">
 			{{ form.BrowserBookmarksProbe.errors }}
@@ -93,8 +105,8 @@
 			{{ form.BrowserSearchesProbe }} <label for="BrowserSearchesProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Browser_Searches">Browser Searches</a> every </label>{{ form.BrowserSearchesProbe_freq.errors }}{{ form.BrowserSearchesProbe_freq }} seconds
 		</div>
 		<div class="fieldWrapper">
-			{{ form.ImagesProbe.errors }}
-			{{ form.ImagesProbe }} <label for="ImagesProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Images">Images</a> every </label>{{ form.ImagesProbe_freq.errors }}{{ form.ImagesProbe_freq }} seconds
+			{{ form.ImageMediaProbe.errors }}
+			{{ form.ImageMediaProbe }} <label for="ImageMediaProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Images">Images</a> every </label>{{ form.ImageMediaProbe_freq.errors }}{{ form.ImageMediaProbe_freq }} seconds
 		</div>
 		<div class="fieldWrapper">
 			{{ form.ApplicationsProbe.errors }}
@@ -105,8 +117,8 @@
 			{{ form.RunningApplicationsProbe }} <label for="RunningApplicationsProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Running_Applications">Running Applications</a> every </label>{{ form.RunningApplicationsProbe_freq.errors }}{{ form.RunningApplicationsProbe_freq }} seconds
 		</div>
 		<div class="fieldWrapper">
-			{{ form.VideosProbe.errors }}
-			{{ form.VideosProbe }} <label for="VideosProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Videos">Videos</a> every </label>{{ form.VideosProbe_freq.errors }}{{ form.VideosProbe_freq }} seconds
+			{{ form.VideoMediaProbe.errors }}
+			{{ form.VideoMediaProbe }} <label for="VideoMediaProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Videos">Videos</a> every </label>{{ form.VideoMediaProbe_freq.errors }}{{ form.VideoMediaProbe_freq }} seconds
 		</div>
 		<div class="fieldWrapper">
 			{{ form.ScreenProbe.errors }}
@@ -161,8 +173,8 @@
 			{{ form.GyroscopeSensorProbe }} <label for="GyroscopeSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Gyroscope_Sensor">Gyroscope Sensor</a> every </label>{{ form.GyroscopeSensorProbe_freq.errors }}{{ form.GyroscopeSensorProbe_freq }} seconds for {{ form.GyroscopeSensorProbe_duration.errors }}{{ form.GyroscopeSensorProbe_duration }} seconds
 		</div>
 		<div class="fieldWrapper">
-			{{ form.LinearAccelerationProbe.errors }}
-			{{ form.LinearAccelerationProbe }} <label for="LinearAccelerationProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Linear_Acceleration_Sensor">Linear Acceleration Sensor</a> every </label>{{ form.LinearAccelerationProbe_freq.errors }}{{ form.LinearAccelerationProbe_freq }} seconds for {{ form.LinearAccelerationProbe_duration.errors }}{{ form.LinearAccelerationProbe_duration }} seconds
+			{{ form.LinearAccelerationSensorProbe.errors }}
+			{{ form.LinearAccelerationSensorProbe }} <label for="LinearAccelerationSensorProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Linear_Acceleration_Sensor">Linear Acceleration Sensor</a> every </label>{{ form.LinearAccelerationSensorProbe_freq.errors }}{{ form.LinearAccelerationSensorProbe_freq }} seconds for {{ form.LinearAccelerationSensorProbe_duration.errors }}{{ form.LinearAccelerationSensorProbe_duration }} seconds
 		</div>
 		<div class="fieldWrapper">
 			{{ form.OrientationSensorProbe.errors }}
@@ -179,12 +191,16 @@
 			{{ form.LocationProbe }} <label for="LocationProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Location">Location</a> every </label>{{ form.LocationProbe_freq.errors }}{{ form.LocationProbe_freq }} seconds for {{ form.LocationProbe_duration.errors }}{{ form.LocationProbe_duration }} seconds
 		</div>
 		<div class="fieldWrapper">
+			{{ form.SimpleLocationProbe.errors }}
+			{{ form.SimpleLocationProbe }} <label for="SimpleLocationProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Simple_Location">Simple Location</a> every </label>{{ form.SimpleLocationProbe_freq.errors }}{{ form.SimpleLocationProbe_freq }} seconds for {{ form.SimpleLocationProbe_duration.errors }}{{ form.SimpleLocationProbe_duration }} seconds
+		</div>
+		<div class="fieldWrapper">
 			{{ form.BluetoothProbe.errors }}
 			{{ form.BluetoothProbe }} <label for="BluetoothProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Bluetooth">Bluetooth</a> every </label>{{ form.BluetoothProbe_freq.errors }}{{ form.BluetoothProbe_freq }} seconds for {{ form.BluetoothProbe_duration.errors }}{{ form.BluetoothProbe_duration }} seconds
 		</div>
 		<div class="fieldWrapper">
-			{{ form.CellProbe.errors }}
-			{{ form.CellProbe }} <label for="CellProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Cell">Cell Towers</a> every </label>{{ form.CellProbe_freq.errors }}{{ form.CellProbe_freq }} seconds for {{ form.CellProbe_duration.errors }}{{ form.CellProbe_duration }} seconds
+			{{ form.CellTowerProbe.errors }}
+			{{ form.CellTowerProbe }} <label for="CellTowerProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Cell">Cell Towers</a> every </label>{{ form.CellTowerProbe_freq.errors }}{{ form.CellTowerProbe_freq }} seconds for {{ form.CellTowerProbe_duration.errors }}{{ form.CellTowerProbe_duration }} seconds
 		</div>
 		<div class="fieldWrapper">
 			{{ form.WifiProbe.errors }}
