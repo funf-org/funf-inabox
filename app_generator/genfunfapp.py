@@ -124,12 +124,15 @@ def generate(dir_path, user_id, dropbox_token, dropbox_token_secret, name, descr
     encryption_password = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(12))
     with open(os.path.join(config_dir, 'encryption_password.txt'), 'w') as file:
         file.write(encryption_password)
-    # Add to funf config
-    funf_config['archive'] = {
+
+
+    funf_config_obj = json.loads(funf_conf)
+    # Add password to funf config
+    funf_config_obj['archive'] = {
         'name': funf_config['name'],
         'password': encryption_password
     }
-    
+    funf_conf = json.dumps(funf_config_obj)
     
     # Create Funf Config
     with open(os.path.join(config_dir, 'funf_config.json'), 'w') as file:
@@ -145,7 +148,6 @@ def generate(dir_path, user_id, dropbox_token, dropbox_token_secret, name, descr
     shutil.copy(keystore_path, android_app_dir)
     
     ## Create inabox.properties
-    funf_config_obj = json.loads(funf_conf)
     permissions = _all_permisssions.replace('\n', '') # TODO: calculate only necessary permissions
     
     # Quotes escaped for java properties file, so that resources compile
