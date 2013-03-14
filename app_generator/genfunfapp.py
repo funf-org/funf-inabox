@@ -124,6 +124,11 @@ def generate(dir_path, user_id, dropbox_token, dropbox_token_secret, name, descr
     encryption_password = ''.join(random.choice(string.ascii_letters + string.digits) for x in range(12))
     with open(os.path.join(config_dir, 'encryption_password.txt'), 'w') as file:
         file.write(encryption_password)
+    # Add to funf config
+    funf_config['archive'] = {
+        'name': funf_config['name'],
+        'password': encryption_password
+    }
     
     
     # Create Funf Config
