@@ -129,7 +129,7 @@ def generate(dir_path, user_id, dropbox_token, dropbox_token_secret, name, descr
     funf_config_obj = json.loads(funf_conf)
     # Add password to funf config
     funf_config_obj['archive'] = {
-        'name': funf_config['name'],
+        'name': funf_config_obj['name'],
         'password': encryption_password
     }
     funf_conf = json.dumps(funf_config_obj)
