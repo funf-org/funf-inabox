@@ -24,6 +24,7 @@ from dropbox import client, rest, session
 import os
 from django.shortcuts import redirect, render
 from django.core.urlresolvers import reverse
+from django.utils.html import escape
 from models import Stats
 from forms import CreateAppForm
 import time, datetime
@@ -132,10 +133,10 @@ def app_create(request):
             for field_name in form.cleaned_data.keys():
                 #Registration info
                 if field_name.endswith('REG_INFO'):
-                    app_registration_vars[field_name] = form.cleaned_data[field_name]
+                    app_registration_vars[field_name] = escape(form.cleaned_data[field_name])
                 #General app info
                 elif not field_name.endswith('Probe') and not field_name.endswith('freq') and not field_name.endswith('duration'):
-                    app_form_vars[field_name] = form.cleaned_data[field_name]
+                    app_form_vars[field_name] = escape(form.cleaned_data[field_name])
                 #Probe info
                 elif not field_name.endswith('freq') and not field_name.endswith('duration') and not form.cleaned_data[field_name] == False:
                     try:
