@@ -1,0 +1,38 @@
+The scripts directory includes all of the processing scripts required to get data decrypted, merged, and into a format you can analyze it.
+
+
+Running Prebuilt Executables
+
+WINDOWS
+Double click step1_process_data(win).exe app and a file will appear in the data folder call "all_data.db".
+To get data in CSV form, double click the step2_convert_to_csv(win).exe.
+
+OS X
+Unzip step1_process_data(mac).zip and step2_convert_to_csv(mac).zip
+Double click step1 app and a file will appear in the data folder call "all_data.db".
+To get data in CSV form, double click the step 2 app.
+
+
+
+
+Running Raw Python Scripts
+
+Unzip the raw_scripts.zip folder, and ensure that the contents are in the current directory, not in a subdirectory called raw_scripts (this is the default on OS X).
+
+WINDOWS
+Install Python. (http://www.python.org/download/)
+Install PyCrypto.  
+	Binaries: (http://www.voidspace.org.uk/python/modules.shtml#pycrypto) or from source
+	Source: (Much harder, but here is one tutorial http://www.secker.nl/2012/03/08/building-pycrypto-2-5-using-mingw-and-python-2-7-on-windows-xp/ )
+Install SQLite (http://trac.edgewall.org/wiki/PySqlite)
+Run python process_data.py
+Run python convert_to_csv.py
+
+
+OS X
+The easiest way is to install pip by running: 
+easy_install pip
+Then install PyCrypto and PySqlite by running:
+pip install pycrypto pysqlite
+Run python process_data.py
+Run python convert_to_csv.py
