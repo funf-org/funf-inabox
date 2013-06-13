@@ -32,11 +32,15 @@ class CreateAppForm(forms.Form):
     creator_email_REG_INFO = forms.EmailField(required=False)
     org_name_REG_INFO = forms.CharField(max_length=200, required=False)
     location_REG_INFO = forms.CharField(max_length=200,required=False)
+    #Configuration Update
+    configUpdate = forms.BooleanField(required=False)
+    configUpdate_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
     #Device
     dataUploadStrategy = forms.ChoiceField(required=True, choices=(('ANY', 'Over Wi-Fi or mobile network'),
                                                                    ('WIFI', 'Over Wi-Fi only'),
                                                                    ('NONE', 'No automatic upload'),
                                                                    ))
+    dataUpload_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
     AndroidInfoProbe = forms.BooleanField(required=False)
     AndroidInfoProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
     AccountsProbe = forms.BooleanField(required=False)

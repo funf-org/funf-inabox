@@ -134,6 +134,10 @@ def app_create(request):
                 #Registration info
                 if field_name.endswith('REG_INFO'):
                     app_registration_vars[field_name] = form.cleaned_data[field_name]
+                #Configuration update/Upload data info
+                if field_name == 'configUpdate_freq' or field_name == 'dataUpload_freq':
+                    if form.cleaned_data[field_name] != None:
+                        app_form_vars[field_name] = int(form.cleaned_data[field_name])
                 #General app info
                 elif not field_name.endswith('Probe') and not field_name.endswith('freq') and not field_name.endswith('duration'):
                     #Clean if app name
@@ -193,12 +197,12 @@ def create_app_config(app_form_vars, app_probe_vars):
         'version': 1,
         'upload': None if app_form_vars['dataUploadStrategy'] == 'NONE' else {
             '@type': 'funfinabox.app.DropboxArchive',
-            '@schedule': {'interval': 10800},  
+            '@schedule': {'interval': app_form_vars['dataUpload_freq'] if 'dataUpload_freq' in app_form_vars else 10800},
             'wifiOnly': True if app_form_vars['dataUploadStrategy'] == 'WIFI' else False
         },
         'update': {
             '@type': 'funfinabox.app.DropboxConfigUpdater',
-            '@schedule': {'interval': 10800}
+            '@schedule': {'interval': app_form_vars['configUpdate_freq'] if ( app_form_vars['configUpdate'] and ('configUpdate_freq' in app_form_vars) ) else 10800}
         },
         'data': []
     }

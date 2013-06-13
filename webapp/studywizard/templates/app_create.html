@@ -46,11 +46,17 @@
 	    <h3>Configuration</h3>
 	    <hr />
 	    The following are the default data collection and configuration settings. They can be modified at Dropbox/Funf In A Box/[Your App Name]/config/funf_config.json.
+	    <h3>Configuration Update</h3>
+	    <hr />
+	    <div class="fieldWrapper">
+	    	{{ form.configUpdate.errors }}
+	        {{ form.configUpdate }} <label for="configUpdate_freq"><a target="_blank" href="https://code.google.com/p/funf-open-sensing-framework/wiki/Configuration">Configuration Update</a> every </label>{{ form.configUpdate_freq.errors }}{{ form.configUpdate_freq }} seconds
+	    </div>
 	    <h3>Automatic Upload</h3>
 	    <hr />
 	    <div class="fieldWrapper">
 	        {{ form.dataUploadStrategy.errors }}
-	        {{ form.dataUploadStrategy }} 
+	        {{ form.dataUploadStrategy }} every {{ form.dataUpload_freq.errors }}{{ form.dataUpload_freq }} seconds
 	        <p>Note: You can always manually upload using the "Sync Now" menu option in the app.
 	        </p>
 	    </div>
