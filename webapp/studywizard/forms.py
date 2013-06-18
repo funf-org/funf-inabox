@@ -33,7 +33,7 @@ class CreateAppForm(forms.Form):
     org_name_REG_INFO = forms.CharField(max_length=200, required=False)
     location_REG_INFO = forms.CharField(max_length=200,required=False)
     #Configuration Update
-    configUpdate = forms.BooleanField(required=False)
+    configUpdate = forms.BooleanField(required=True)
     configUpdate_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
     #Device
     dataUploadStrategy = forms.ChoiceField(required=True, choices=(('ANY', 'Over Wi-Fi or mobile network'),

@@ -202,7 +202,7 @@ def create_app_config(app_form_vars, app_probe_vars):
         },
         'update': {
             '@type': 'funfinabox.app.DropboxConfigUpdater',
-            '@schedule': {'interval': app_form_vars['configUpdate_freq'] if ( app_form_vars['configUpdate'] and ('configUpdate_freq' in app_form_vars) ) else 10800}
+            '@schedule': {'interval': app_form_vars.get('configUpdate_freq', 10800)} if app_form_vars['configUpdate'] else None
         },
         'data': []
     }
