@@ -201,11 +201,15 @@ def create_app_config(app_form_vars, app_probe_vars):
             'wifiOnly': True if app_form_vars['dataUploadStrategy'] == 'WIFI' else False
         },
         'update': {
-            '@type': 'funfinabox.app.DropboxConfigUpdater',
-            '@schedule': {'interval': app_form_vars.get('configUpdate_freq', 10800)} if app_form_vars['configUpdate'] else 'None'
+            '@type': 'funfinabox.app.DropboxConfigUpdater'
         },
         'data': []
     }
+    
+    #Add update schedule, if user has checked the corresponding box
+    if app_form_vars['configUpdate']:
+        config_dict['update']['@schedule'] = { 'interval': app_form_vars.get('configUpdate_freq', 10800) }
+    
     
     for key in app_probe_vars.keys():
         probe_config = {'@type': 'edu.mit.media.funf.probe.builtin.' + key}
