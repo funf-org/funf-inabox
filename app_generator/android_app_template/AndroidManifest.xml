@@ -65,6 +65,7 @@
         		<action android:name="android.intent.action.USER_PRESENT" />
         	</intent-filter>
         </receiver>
+        <activity android:name="edu.mit.media.funf.probe.external.WebViewActivity"></activity>
     </application>
     
 </manifest> 
