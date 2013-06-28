@@ -140,5 +140,11 @@ class CreateAppForm(forms.Form):
     ContactProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
     SmsProbe = forms.BooleanField(required=False)
     SmsProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
+    #User Study Notification
+    UserStudyNotificationProbe = forms.BooleanField(required=False)
+    UserStudyNotificationProbe_freq = forms.DecimalField(required=False, widget=forms.TextInput(attrs={'size': '5', 'class': 'form_freq',}))
+    UserStudyNotificationProbe_url = forms.URLField(required=False)
+    UserStudyNotificationProbe_notifyTitle = forms.CharField(max_length=200,required=False)
+    UserStudyNotificationProbe_notifyMessage = forms.CharField(max_length=200,required=False)
     #Read terms and conditions
     ReadTermsAndConditions = forms.BooleanField(required=True)

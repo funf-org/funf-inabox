@@ -149,6 +149,11 @@ def app_create(request):
                 elif not field_name.endswith('freq') and not field_name.endswith('duration') and not form.cleaned_data[field_name] == False:
                     try:
                         app_probe_vars[field_name] = {}
+                        #Extra parameters for UserStudyNotificationProbe
+                        if field_name == 'UserStudyNotificationProbe':
+                            app_probe_vars[field_name]['URL'] = form.cleaned_data[field_name + '_url']
+                            app_probe_vars[field_name]['TITLE'] = form.cleaned_data[field_name + '_notifyTitle']
+                            app_probe_vars[field_name]['MESSAGE'] = form.cleaned_data[field_name + '_notifyMessage']
                         app_probe_vars[field_name]['PERIOD'] = int(form.cleaned_data[field_name + '_freq'])
                         app_probe_vars[field_name]['DURATION'] = int(form.cleaned_data[field_name + '_duration'])
                     except:
@@ -212,7 +217,10 @@ def create_app_config(app_form_vars, app_probe_vars):
     
     
     for key in app_probe_vars.keys():
-        probe_config = {'@type': 'edu.mit.media.funf.probe.builtin.' + key}
+        if key == 'UserStudyNotificationProbe': 
+            probe_config = {'@type': 'edu.mit.media.funf.probe.external.' + key}
+        else: 
+            probe_config = {'@type': 'edu.mit.media.funf.probe.builtin.' + key}
         schedule = {}
         try:
             schedule['interval'] = app_probe_vars[key]['PERIOD']
@@ -226,6 +234,12 @@ def create_app_config(app_form_vars, app_probe_vars):
         # Custom defaults for FIAB (specifically the LightSensor since it goes crazy otherwise)
         if key == 'LightSensorProbe':
             probe_config['sensorDelay'] = "NORMAL"
+            
+        # Add the extra parameters for UserStudyNotificationProbe
+        if key == 'UserStudyNotificationProbe':
+            if app_probe_vars[key]['URL']: probe_config['url'] = app_probe_vars[key]['URL']
+            if app_probe_vars[key]['TITLE']: probe_config['notifyTitle'] = app_probe_vars[key]['TITLE']
+            if app_probe_vars[key]['MESSAGE']: probe_config['notifyMessage'] = app_probe_vars[key]['MESSAGE']
 
         config_dict['data'].append(probe_config)
 

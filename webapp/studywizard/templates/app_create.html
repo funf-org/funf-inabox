@@ -226,6 +226,24 @@
 	        {{ form.SmsProbe.errors }}
 	        {{ form.SmsProbe }} <label for="SmsProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki/BuiltinProbes#Sms">SMS Logs</a> every </label>{{ form.SmsProbe_freq.errors }}{{ form.SmsProbe_freq }} seconds
 	    </div>
+	    <h3>User Notification</h3>
+	    <hr />
+	    <div class="fieldWrapper">
+	        {{ form.UserStudyNotificationProbe.errors }}
+	        {{ form.UserStudyNotificationProbe_url.errors }}
+	        {{ form.UserStudyNotificationProbe }} <label for="UserStudyNotificationProbe_freq"><a target="_blank" href="http://code.google.com/p/funf-open-sensing-framework/wiki">User Study Notification</a> every </label>{{ form.UserStudyNotificationProbe_freq.errors }}{{ form.UserStudyNotificationProbe_freq }} seconds with {{ form.UserStudyNotificationProbe_url }}
+	    </div>
+	    <br>
+	    <div class="fieldWrapper">
+	        {{ form.UserStudyNotificationProbe_notifyTitle.errors }}
+	        <label for="id_UserStudyNotificationProbe_notifyTitle">Notification Title:</label>
+	        {{ form.UserStudyNotificationProbe_notifyTitle }}
+	    </div>
+	    <div class="fieldWrapper">
+	        {{ form.UserStudyNotificationProbe_notifyMessage.errors }}
+	        <label for="id_UserStudyNotificationProbe_notifyMessage">Notification Message:</label>
+	        {{ form.UserStudyNotificationProbe_notifyMessage }}
+	    </div>
 	    <h3>Terms and Conditions</h3>
 	    <hr />
 	    <div class="fieldWrapper">

@@ -78,8 +78,11 @@ _all_permisssions = '''
     <!-- Accounts probe -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/> 
 
-    <!-- Call lobs -->
+    <!-- Call logs -->
     <uses-permission android:name="android.permission.READ_CALL_LOG"/>
+    
+    <!-- User Study Notification probe -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
 '''
 
 def gen_signing_key(directory, password=keystorepass, name=_unknown, organization=_unknown, organizational_unit=_unknown, city=_unknown, state_or_region=_unknown, country=_unknown):
