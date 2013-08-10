@@ -1,0 +1,35 @@
+To setup, follow Instructions below:
+
+1. Install basic requirements.
+-- git
+-- hg
+-- pip
+-- Google App-Engine Python SDK ( Add to system PATH )
+
+2. Get dependencies.
+$ ./get-dependencies.sh
+
+3. Add/Edit application name.
+Add/edit the application name at the top of the app.yaml file.
+
+4. Add/Edit required keys and Google project-ID.
+Add the following information at the bottom (in the env_variables section) of the apps.yaml file: 
+DROPBOX_APP_KEY
+DROPBOX_APP_SECRET
+GOOGLE_PROJECT_ID
+GOOGLE_API_KEY
+
+To run the application locally:
+$ python manage.py runserver
+
+To deploy the application to Google App Engine (Follow the next step to complete deployment):
+$ python manage.py deploy
+
+To upload the app-template to Amazon S3:
+$ pip install boto
+$ export AWS_ACCESS_KEY_ID=<Your AWS Access Key ID>
+$ export AWS_SECRET_ACCESS_KEY=<Your AWS Secret Access Key>
+$ python deploy_S3.py
+
+For more options:
+$ python manage.py --help

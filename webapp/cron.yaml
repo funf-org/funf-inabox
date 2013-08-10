@@ -1,0 +1,4 @@
+cron:
+- description: Compute Engine Instance Cleanup
+  url: /cron/cleanup
+  schedule: every 1 hours

@@ -1,0 +1,52 @@
+application: funf-in-a-box
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+builtins:
+- remote_api: on
+
+inbound_services:
+- warmup
+
+handlers:
+- url: /cron/cleanup
+  script: studywizard.external.clean.application
+  login: admin
+
+- url: /_ah/queue/deferred
+  script: djangoappengine.deferred.handler.application
+  login: admin
+
+- url: /_ah/stats/.*
+  script: djangoappengine.appstats.application
+
+- url: /media/admin
+  static_dir: django/contrib/admin/media
+  expiration: '0'
+  
+- url: /favicon\.ico
+  static_files: studywizard/static/images/favicon.ico
+  upload: studywizard/static/images/favicon\.ico
+  
+- url: (\/.*)*/css/(.*)
+  static_files: studywizard/static/css/\2
+  upload: studywizard/static/css/(.*)
+
+- url: (\/.*)*/images/(.*)
+  static_files: studywizard/static/images/\2
+  upload: studywizard/static/images/(.*)
+  
+- url: (\/.*)*/js/(.*)
+  static_files: studywizard/static/js/\2
+  upload: studywizard/static/js/(.*)
+
+- url: /.*
+  script: djangoappengine.main.application
+  
+env_variables:
+  DROPBOX_APP_KEY: ''
+  DROPBOX_APP_SECRET: ''
+  GOOGLE_PROJECT_ID: 'funf-in-a-box'
+  GOOGLE_API_KEY: ''

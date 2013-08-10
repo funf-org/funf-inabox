@@ -29,11 +29,8 @@ from models import Stats
 from forms import CreateAppForm
 import time, datetime
 import json
-import fnmatch
-import threading
-import genfunfapp
-import tempfile
-import shutil
+
+from external import ComputeEngine
 
 APP_KEY = os.environ['DROPBOX_APP_KEY']
 APP_SECRET = os.environ['DROPBOX_APP_SECRET']
@@ -84,27 +81,6 @@ def app_list(request):
     folder_metadata = client.metadata('/')
     folder_names = [metadata["path"][1:] for metadata in folder_metadata["contents"] if metadata["is_dir"]]
     return render(request, "app_list.html", {"apps": folder_names})
-
-
-class CreateAppThread(threading.Thread):
-    
-    def __init__(self, db_client, user_id, dropbox_token, dropbox_token_secret, name, description, contact_email, funf_conf):
-        super(CreateAppThread, self).__init__()
-        self.db_client = db_client
-        self.user_id = user_id
-        self.dropbox_token = dropbox_token
-        self.dropbox_token_secret = dropbox_token_secret
-        self.name = name
-        self.description = description
-        self.contact_email = contact_email
-        self.funf_conf = funf_conf
-            
-    def run(self):
-        temp_dir = tempfile.mkdtemp(prefix="funfinabox") 
-        app_dir = genfunfapp.generate(temp_dir, self.user_id, self.dropbox_token, self.dropbox_token_secret, self.name, self.description, self.contact_email, self.funf_conf)
-        copy_to_dropbox(self.db_client, app_dir, os.path.basename(app_dir))
-        shutil.rmtree(temp_dir)
-
 
 def app_create(request):
     #Dropbox auth
@@ -171,9 +147,9 @@ def app_create(request):
             access_token = request.session.get("dropbox_access_token")
             access_token_secret = request.session.get("dropbox_access_token_secret")
             
-            t = CreateAppThread(client, dropbox_account_info["uid"], access_token, access_token_secret, app_form_vars["app_name"], app_form_vars["description"], app_form_vars["contact_email"], config_json)
-            t.start()
-
+            AuthHTTP = ComputeEngine.Authorize()
+            ComputeEngine.NewInstance(AuthHTTP, dropbox_account_info["uid"], access_token, access_token_secret, app_form_vars["app_name"], app_form_vars["description"], app_form_vars["contact_email"], config_json)
+            
             return redirect(app_thanks) # Redirect after POST
     else:
         form = CreateAppForm() # An unbound form
@@ -240,75 +216,10 @@ def create_app_config(app_form_vars, app_probe_vars):
             if app_probe_vars[key]['URL']: probe_config['url'] = app_probe_vars[key]['URL']
             if app_probe_vars[key]['TITLE']: probe_config['notifyTitle'] = app_probe_vars[key]['TITLE']
             if app_probe_vars[key]['MESSAGE']: probe_config['notifyMessage'] = app_probe_vars[key]['MESSAGE']
-
+            
         config_dict['data'].append(probe_config)
 
     return config_dict
 
-
-class CopyError(Exception):
-    def __init__(self, value):
-        self.value = value
-    def __str__(self):
-        return repr(self.value)
-
-def copy_to_dropbox(db_client, root_path, dropbox_folder_name, abort_count = 0):
-    root_length = len(root_path)
-    pattern = '*'
-
-    try:
-        for root, dirs, files in os.walk(root_path):
-            #Strip everything up until our root directory
-            short_root = '/' + dropbox_folder_name + '/' + root[root_length+1:]
-            if not '/.' in short_root:
-                folder_success = copy_folder_to_dropbox(db_client, short_root)
-                if folder_success == False:
-                    raise CopyError
-
-                #Copy files to dropbox
-                for filename in fnmatch.filter(files, pattern):
-                    if not filename.startswith('.'):
-                        f = open(os.path.join(root, filename))
-                        file_success = copy_file_to_dropbox(db_client, short_root, filename, f)
-                        if file_success == False:
-                            raise CopyError
-
-    except CopyError:
-        if abort_count < 5:
-            time.sleep(300)
-            copy_to_dropbox(db_client, root_path, dropbox_folder_name, abort_count = abort_count + 1)
-
-def copy_file_to_dropbox(db_client, short_root, filename, f):
-    copy_success = True
-
-    try:
-        response = db_client.put_file(os.path.join(short_root, filename), f, overwrite=True)
-    except rest.ErrorResponse as inst:
-        time.sleep(30)
-        try:
-            response = db_client.put_file(os.path.join(short_root, filename), f, overwrite=True)
-        except:
-            copy_success = False
-
-    return copy_success
-
-def copy_folder_to_dropbox(db_client, short_root):
-    copy_success = True
-
-    try:
-        response = db_client.file_create_folder(short_root)
-    except rest.ErrorResponse as inst:
-        if not str(inst).startswith('[403]'): #folder already exists
-            time.sleep(30)
-            try:
-                response = db_client.file_create_folder(short_root)
-            except:
-                copy_success = False
-
-    return copy_success
-
-
-
 def test(request):
     pass
-    

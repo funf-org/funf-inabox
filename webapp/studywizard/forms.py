@@ -148,3 +148,32 @@ class CreateAppForm(forms.Form):
     UserStudyNotificationProbe_notifyMessage = forms.CharField(max_length=200,required=False)
     #Read terms and conditions
     ReadTermsAndConditions = forms.BooleanField(required=True)
+    
+    #Conditional Requirements
+    def clean_VideoCaptureProbe_fileNameBase(self):
+        data = self.cleaned_data
+        if data['VideoCaptureProbe'] and not(data['VideoCaptureProbe_fileNameBase']):
+            raise forms.ValidationError('This field is required!')
+        else:
+            return data['VideoCaptureProbe_fileNameBase']
+        
+    def clean_VideoCaptureProbe_folderName(self):
+        data = self.cleaned_data
+        if data['VideoCaptureProbe'] and not(data['VideoCaptureProbe_folderName']):
+            raise forms.ValidationError('This field is required!')
+        else:
+            return data['VideoCaptureProbe_folderName']
+        
+    def clean_VideoCaptureProbe_recordingLength(self):
+        data = self.cleaned_data
+        if data['VideoCaptureProbe'] and not(data['VideoCaptureProbe_recordingLength']):
+            raise forms.ValidationError('This field is required!')
+        else:
+            return data['VideoCaptureProbe_recordingLength']
+        
+    def clean_VideoCaptureProbe_captureRate(self):
+        data = self.cleaned_data
+        if data['VideoCaptureProbe_timeLapse'] and not(data['VideoCaptureProbe_captureRate']):
+            raise forms.ValidationError('This field is required!')
+        else:
+            return data['VideoCaptureProbe_captureRate']

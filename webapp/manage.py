@@ -31,11 +31,5 @@ except ImportError:
 
 import settings
 
-# Add app generator to path in dev
-import sys
-app_generator_path = '../app_generator'
-if app_generator_path not in sys.path:
-    sys.path.append(app_generator_path)
-
 if __name__ == "__main__":
     execute_manager(settings)
