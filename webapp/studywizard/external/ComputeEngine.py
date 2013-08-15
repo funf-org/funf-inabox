@@ -27,8 +27,6 @@ from oauth2client.appengine import AppAssertionCredentials
 from apiclient.discovery import build
 from google.appengine.api.app_identity import get_application_id
 
-from django.http import HttpResponse
-
 import os
 import datetime
 
