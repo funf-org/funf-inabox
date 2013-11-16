@@ -36,7 +36,7 @@ sudo apt-get -y install unzip
 cd $HOME
 wget http://dl.google.com/android/android-sdk_r22.0.1-linux.tgz
 tar xzvf android-sdk_r22.0.1-linux.tgz
-echo "y" | ./android-sdk-linux/tools/android update sdk -u -f -t 1,2,3,6
+echo "y" | ./android-sdk-linux/tools/android update sdk -u -f -t 1,2,3,7
 
 #Install Python modules
 cd $HOME
