@@ -11,7 +11,7 @@ inbound_services:
 - warmup
 
 handlers:
-- url: /cron/cleanup
+- url: /cron/cleanup/.*
   script: studywizard.external.clean.application
   login: admin
 
@@ -41,6 +41,10 @@ handlers:
 - url: (\/.*)*/js/(.*)
   static_files: studywizard/static/js/\2
   upload: studywizard/static/js/(.*)
+  
+- url: /generator-script
+  static_files: studywizard/external/generate_app_remote.py
+  upload: studywizard/external/generate_app_remote\.py
 
 - url: /.*
   script: djangoappengine.main.application

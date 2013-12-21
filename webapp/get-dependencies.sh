@@ -36,7 +36,7 @@ cd dependencies
 unzip google-api-python-client-gae-1.1.zip -d ../
 unzip django-autoload-0.01.zip
 unzip django-dbindexer-0.3.zip
-unzip django-nonrel-1.4.8.zip
+unzip django-nonrel-1.4.10.zip
 unzip djangoappengine-1.4.0.zip
 unzip djangotoolbox-1.4.0.zip
 unzip dropbox-client-python-1.3.zip

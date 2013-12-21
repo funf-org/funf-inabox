@@ -32,16 +32,17 @@ import datetime
 
 #API Config
 GCE_SCOPE = 'https://www.googleapis.com/auth/compute'
-API_VERSION = 'v1beta15'
+API_VERSION = 'v1'
 GCE_URL = 'https://www.googleapis.com/compute/%s/projects/' % (API_VERSION)
 PROJECT_ID = os.environ['GOOGLE_PROJECT_ID']
-ZONE = 'us-central2-a'
+ZONE = 'us-central1-a'
 
 #Instance Config
 MACHINE_TYPE = 'n1-standard-1'
-IMAGE = 'debian-7-wheezy-v20130522'
+IMAGE = 'debian-7-wheezy-v20131120'
 NETWORK = 'default'
 INSTANCE_NAME_BASE = 'funfinabox'
+DISK_NAME_BASE = 'funfdisk'
 INSTANCE_DESCRIPTION = 'Funf In a Box App Generator'
 
 #Instance Config URLs
@@ -50,6 +51,7 @@ network_url = '%s/global/networks/%s' % (project_url, NETWORK)
 zone_url = '%s/zones/%s' % (project_url, ZONE)
 image_url = '%s%s/global/images/%s' % (GCE_URL, 'debian-cloud', IMAGE)
 machine_type_url = '%s/zones/%s/machineTypes/%s' % (project_url, ZONE, MACHINE_TYPE)
+root_disk_url = '%s/zones/%s/disks/' % (project_url, ZONE)
 
 #Metadata Config
 startup_script = 'app-generator.sh'
@@ -73,13 +75,52 @@ def ListInstances(auth_http):
         return instances
     else:
         return None
-        
+    
+    
+def ListDisks(auth_http):
+    #Get a service object
+    gce_service = build('compute', API_VERSION, developerKey=os.environ['GOOGLE_API_KEY'])
+    
+    # List Disks
+    request = gce_service.disks().list(project=PROJECT_ID, filter=None, zone=ZONE)
+    response = request.execute(http=auth_http)
+    if response and 'items' in response:
+        disks = response['items']
+        return disks
+    else:
+        return None
+    
+    
+def NewDisk(auth_http, gce_service):
+    
+    disk_name = DISK_NAME_BASE+datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
+    disk = {
+        'name': disk_name
+    }
+
+    #Create a new disk
+    request = gce_service.disks().insert(project=PROJECT_ID, body=disk, zone=ZONE, sourceImage=image_url)
+    response = request.execute(http=auth_http)
+    _blocking_call(gce_service, auth_http, response)
+    
+    return disk_name
+    
 
 def NewInstance(auth_http, user_id, dropbox_token, dropbox_token_secret, name, description, contact_email, funf_conf):
+    #Get a service object
+    gce_service = build('compute', API_VERSION, developerKey=os.environ['GOOGLE_API_KEY'])
+    
+    #New Disk Creation
+    DISK = NewDisk(auth_http, gce_service)
+    
     #New Instance Specification
     instance = {
       "kind": "compute#instance",
-      "disks": [],
+      "disks": [{
+       'source': root_disk_url+DISK,
+       'boot': 'true',
+       'type': 'PERSISTENT'
+      }],
       "networkInterfaces": [
         {
           "kind": "compute#instanceNetworkInterface",
@@ -96,7 +137,6 @@ def NewInstance(auth_http, user_id, dropbox_token, dropbox_token_secret, name, d
       "metadata": {
         "items": []
       },
-      "image": image_url,
       "machineType": machine_type_url,
       "name": INSTANCE_NAME_BASE+datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"),
       "description": INSTANCE_DESCRIPTION,
@@ -111,9 +151,6 @@ def NewInstance(auth_http, user_id, dropbox_token, dropbox_token_secret, name, d
          'items': [{
              'key': 'startup-script',
              'value': file(os.path.join(os.path.dirname(__file__), startup_script), 'r').read()
-           }, {
-             'key': 'generator-script',
-             'value': file(os.path.join(os.path.dirname(__file__), generator_script), 'r').read()
            }, {
              'key': 'user_id',
              'value': user_id
@@ -148,9 +185,27 @@ def NewInstance(auth_http, user_id, dropbox_token, dropbox_token_secret, name, d
       }]
     }
     
-    #Get a service object
-    gce_service = build('compute', API_VERSION, developerKey=os.environ['GOOGLE_API_KEY'])
-    
     #Instantiate a new instance
     request = gce_service.instances().insert(project=PROJECT_ID, body=instance, zone=ZONE)
     request.execute(http=auth_http)
+    
+    
+def _blocking_call(gce_service, auth_http, response):
+    """Blocks until the operation status is done for the given operation."""
+
+    status = response['status']
+    while status != 'DONE' and response:
+      operation_id = response['name']
+
+      # Identify if this is a per-zone resource
+      if 'zone' in response:
+        zone_name = response['zone'].split('/')[-1]
+        request = gce_service.zoneOperations().get(project=PROJECT_ID, operation=operation_id, zone=zone_name)
+      else:
+        request = gce_service.globalOperations().get(project=PROJECT_ID, operation=operation_id)
+
+      response = request.execute(http=auth_http)
+      if response:
+        status = response['status']
+    
+    return response

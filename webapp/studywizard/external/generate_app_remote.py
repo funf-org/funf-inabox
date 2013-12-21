@@ -33,10 +33,10 @@ from dropbox import client, rest, session
 import genfunfapp
 
 
-METADATA_URL = 'http://metadata/computeMetadata/v1beta1/instance/attributes/'
+METADATA_URL = 'http://metadata/computeMetadata/v1/instance/attributes/'
 
 def getAttribute(attr):
-    return urllib2.urlopen(METADATA_URL+attr).read()
+    return urllib2.urlopen(urllib2.Request(METADATA_URL+attr, headers={'X-Google-Metadata-Request': 'True'})).read()
 
 APP_KEY = os.environ['DROPBOX_APP_KEY']
 APP_SECRET = os.environ['DROPBOX_APP_SECRET']

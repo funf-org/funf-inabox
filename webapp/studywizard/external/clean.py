@@ -30,7 +30,7 @@ import os
 import ComputeEngine
 
 
-class Cleaner(webapp2.RequestHandler):
+class InstanceCleaner(webapp2.RequestHandler):
 
     def get(self):
         AuthHTTP = ComputeEngine.Authorize()
@@ -70,10 +70,53 @@ class Cleaner(webapp2.RequestHandler):
             if count > 0 :logging.info(str(count)+' instances deleted!')
             
         return None
+    
+    
+class DiskCleaner(webapp2.RequestHandler):
+
+    def get(self):
+        AuthHTTP = ComputeEngine.Authorize()
+        
+        Disks = ComputeEngine.ListDisks(AuthHTTP)
+        if not(Disks):
+            logging.info('No Disks!')
+        else:
+            gce_service = build('compute', ComputeEngine.API_VERSION, developerKey=os.environ['GOOGLE_API_KEY'])
+            count = 0
+            for disk in Disks:
+                if disk['status'] == 'FAILED':
+                    Request = gce_service.disks().delete(project=ComputeEngine.PROJECT_ID, 
+                                                             disk=disk['name'],
+                                                             zone=ComputeEngine.ZONE)
+                    response = Request.execute(http=AuthHTTP)
+                    count += 1
+                    
+                if disk['status'] == 'READY':
+                    CreationTS = disk['creationTimestamp']
+                    TimeStamp = CreationTS[:-6]
+                    TimeZone = CreationTS[-6:]
+                    TZHour = int(TimeZone.split(':')[0])
+                    if TZHour > 0 : TZHMin = int(TimeZone.split(':')[1])
+                    else: TZMin = int(TimeZone.split(':')[1]) * (-1)
+                    
+                    Created = datetime.strptime(TimeStamp, "%Y-%m-%dT%H:%M:%S.%f")
+                    CurrentUTC = datetime.utcnow() + timedelta(hours=TZHour,minutes=TZMin)
+                    
+                    if( CurrentUTC - Created > timedelta(minutes=20) ):
+                        Request = gce_service.disks().delete(project=ComputeEngine.PROJECT_ID, 
+                                                                 disk=disk['name'],
+                                                                 zone=ComputeEngine.ZONE)
+                        response = Request.execute(http=AuthHTTP)
+                        count += 1
+                        
+            if count > 0 :logging.info(str(count)+' disks deleted!')
+            
+        return None
 
 
 application = webapp2.WSGIApplication([
-    ('/cron/cleanup', Cleaner),
+    ('/cron/cleanup/instances', InstanceCleaner),
+    ('/cron/cleanup/disks', DiskCleaner),
 ], debug=True)
 
 if __name__ == '__main__':

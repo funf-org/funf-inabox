@@ -1,4 +1,8 @@
 cron:
 - description: Compute Engine Instance Cleanup
-  url: /cron/cleanup
+  url: /cron/cleanup/instances
   schedule: every 1 hours
+  
+- description: Compute Engine Disk Cleanup
+  url: /cron/cleanup/disks
+  schedule: every 30 minutes

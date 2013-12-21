@@ -13,7 +13,7 @@ $ ./get-dependencies.sh
 Add/edit the application name at the top of the app.yaml file.
 
 4. Add/Edit required keys and Google project-ID.
-Add the following information at the bottom (in the env_variables section) of the apps.yaml file: 
+Add the following information at the bottom (in the env_variables section) of the app.yaml file: 
 DROPBOX_APP_KEY
 DROPBOX_APP_SECRET
 GOOGLE_PROJECT_ID
