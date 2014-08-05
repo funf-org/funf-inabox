@@ -39,7 +39,7 @@ ZONE = 'us-central1-a'
 
 #Instance Config
 MACHINE_TYPE = 'n1-standard-1'
-IMAGE = 'debian-7-wheezy-v20131120'
+IMAGE = 'debian-7-wheezy-v20140718'
 NETWORK = 'default'
 INSTANCE_NAME_BASE = 'funfinabox'
 DISK_NAME_BASE = 'funfdisk'

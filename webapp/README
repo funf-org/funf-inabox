@@ -4,7 +4,7 @@ To setup, follow Instructions below:
 -- git
 -- hg
 -- pip
--- Google App-Engine Python SDK ( Add to system PATH )
+-- Google App-Engine Python SDK (Add google_appengine and google_appengnie/lib to system PATH)
 
 2. Get dependencies.
 $ ./get-dependencies.sh
